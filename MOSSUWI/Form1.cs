@@ -1,5 +1,4 @@
-﻿using Microsoft.Graph;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,87 +7,43 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MOSSUWI
 {
     public partial class Form1 : Form
     {
-        private bool validData;
-        private string lastFilename;
-
+       
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void pictureBox1_DragEnter(object sender, DragEventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            Debug.WriteLine("OnDragEnter");
-            string filename;
-            validData = GetFilename(out filename, e);
-            if (validData)
+            using (OpenFileDialog dialog = new OpenFileDialog())
             {
-                if (lastFilename != filename)
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    Thumbnail.Image = null;
-                    Thumbnail.Visible = false;
-                    lastFilename = filename;
-                    getImageThread = new Thread(new ThreadStart(LoadImage));
-                    getImageThread.Start();
+                    textBox1.Text = dialog.FileName;
                 }
-                else
-                {
-                    thumbnail.Visible = true;
-                }
-                e.Effect = DragDropEffects.Copy;
             }
+        }
+
+        private void textBox1_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Link;
             else
-            {
                 e.Effect = DragDropEffects.None;
-            }
-        }
-        protected bool GetFilename(out string filename, DragEventArgs e)
-        {
-            bool ret = false;
-            filename = String.Empty;
-
-            if ((e.AllowedEffect & DragDropEffects.Copy) == DragDropEffects.Copy)
-            {
-                Array data = ((IDataObject)e.Data).GetData("FileName") as Array;
-                if (data != null)
-                {
-                    if ((data.Length == 1) && (data.GetValue(0) is String))
-                    {
-                        filename = ((string[])data)[0];
-                        string ext = Path.GetExtension(filename).ToLower();
-                        if ((ext == ".zip") || (ext == ".dir"))
-                        {
-                            ret = true;
-                        }
-                    }
-                }
-            }
-            return ret;
-        }
-        public delegate void AssignImageDlgt();
-
-        protected void LoadImage()
-        {
-            nextImage = new Bitmap(lastFilename);
-            this.Invoke(new AssignImageDlgt(AssignImage));
         }
 
-        protected void AssignImage()
+        private void textBox1_DragDrop(object sender, DragEventArgs e)
         {
-            thumbnail.Width = 100;
-            // 100 iWidth
-            // ---- = ------
-            // tHeight iHeight
-            thumbnail.Height = nextImage.Height * 100 / nextImage.Width;
-            SetThumbnailLocation(this.PointToClient(new Point(lastX, lastY)));
-            thumbnail.Image = nextImage;
+            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[]; // get all files droppeds  
+            if (files != null && files.Any())
+                textBox1.Text = files.First(); //select the first one 
         }
     }
 

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MOSSUWI": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
