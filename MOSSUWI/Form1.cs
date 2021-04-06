@@ -48,13 +48,36 @@ namespace MOSSUWI
 
         private void button2_Click(object sender, EventArgs e) // Collates data from other GUI elemets and uploads to MOSS | Mimics Strawberry Perl Command Line
         {
-            string selectedLang = langComboBox.Text; // if the spaces in Arguments throw errors, set variables to " " and concatenate specific texts
-            string selectedReps = maxRepsUpDown.Text;
-            string customText = customTextTextBox.Text;
-            string baseFile = baseFileTextBox.Text;
+            string selectedLang = " ";
+            selectedLang += langComboBox.Text; // if the spaces in Arguments throw errors, set variables to " " and concatenate specific texts
+            
+            string selectedReps = " ";
+            selectedReps += "-m " + maxRepsUpDown.Text;
+            
+            string customText = "";
+            while (!String.IsNullOrEmpty(customTextTextBox.Text))
+            {
+                customText += "-c " + customTextTextBox.Text;
+            }
+            
+            string baseFile = "";
+            while (!String.IsNullOrEmpty(baseFileTextBox.Text))
+            {
+                baseFile += " -b " + baseFileTextBox.Text;
+            }
+            
             string groupFiles = "";
-            string maxMatching = maxMatchingFilesUpDown.Text;
+            if (groupFilesCheckBox.Checked)
+            {
+                groupFiles += " -d";
+            }
 
+            string maxMatching = " -n " + maxMatchingFilesUpDown.Text;
+
+            if(selectedLang == "Python")
+            {
+                selectedLang = "python";
+            }
             if (selectedLang == "C#") 
             {
                 selectedLang = "csharp";
@@ -80,15 +103,10 @@ namespace MOSSUWI
                 selectedLang = "plsql";
             }
 
-            if (groupFilesCheckBox.Checked) 
-            {
-                groupFiles = "-d";
-            }
-
             ProcessStartInfo ps = new ProcessStartInfo();
             ps.FileName = "cmd.exe";
             ps.WindowStyle = ProcessWindowStyle.Normal;
-            ps.Arguments = @"/k cd C:\Users\shani\Documents && perl moss.pl -l " + selectedLang + " " + groupFiles + " " + baseFile + " " + selectedReps + " " + customText + " " + maxMatching + " test1.py test2.py"; // *.py
+            ps.Arguments = @"/k cd C:\Users\shani\Documents && perl moss.pl -l " + selectedLang + groupFiles + baseFile + maxMatching + selectedReps + customText + " test1.py test2.py"; // *.py
             //ps.Arguments = @"/k cd C:\Users\shani\Documents && perl moss.pl -l python test1.py test2.py";
             //ps.Arguments = @"/k perl C:\Users\shani\Documents\moss.pl -l python C:\Users\shani\Documents\test1.py C:\Users\shani\Documents\test2.py";
             Process.Start(ps);
