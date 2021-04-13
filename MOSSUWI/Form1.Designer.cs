@@ -293,10 +293,10 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(186, 392);
+            this.textBox2.Location = new System.Drawing.Point(85, 392);
             this.textBox2.Margin = new System.Windows.Forms.Padding(2);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(106, 23);
+            this.textBox2.Size = new System.Drawing.Size(246, 23);
             this.textBox2.TabIndex = 16;
             // 
             // mossDownloadButton

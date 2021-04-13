@@ -29,6 +29,7 @@ namespace MOSSUWI
         protected List<string> flaggedStudents = new List<string>();
         protected List<string> students = new List<string>();
         protected string ext = "";
+        protected string linkToResults = "";
         private static IFirebaseConfig config = new FirebaseConfig
         {
             AuthSecret = "dfadqKovUbxz2GKPM0H0fnc3kOE6R8sY9spW2rY8",
@@ -685,7 +686,6 @@ namespace MOSSUWI
                         mosspath = dialog.FileName;
                     }
                 }
-                MessageBox.Show(studentFiles);
                 if (mosspath != "")
                 {
                     ProcessStartInfo ps = new ProcessStartInfo();
@@ -695,14 +695,17 @@ namespace MOSSUWI
                     ps.WindowStyle = ProcessWindowStyle.Normal;
                     ps.Arguments = @"/k perl " + mosspath + " -l " + selectedLang2 + groupFiles + baseFile + maxMatching + selectedReps + customText + studentFiles;
                     var process = Process.Start(ps);
-                    var output = process.StandardOutput.ReadToEnd();
+                    string output = process.StandardOutput.ReadToEnd();
+                    string[] results = output.Split("\n");
                     MessageBox.Show(output);
-                    int sub1 = output.IndexOf("http");
-                    int sub2 = output.IndexOf("C:");
-                    int sub3 = sub2 - sub1;
-                    string substring = output.Substring(sub1, sub3);
-                    textBox2.Text = substring;
-                    //2 Zingers for $35 every Wednesday at KFC
+                    foreach (string res in results)
+                    {
+                        if (res.Contains("http"))
+                        {
+                            linkToResults = res;
+                            textBox2.Text = res;
+                        }
+                    }
                 }
                 else
                 {
@@ -803,26 +806,36 @@ namespace MOSSUWI
         }
         private void mossDownloadButton_Click(object sender, EventArgs e)
         {
-            String url = textBox2.Text;
-            var html = @"http://moss.stanford.edu/results/1/3177155154730/";
+            MessageBox.Show(linkToResults);
+            var html = linkToResults;
             HtmlWeb web = new HtmlWeb();
             var htmlDoc = web.Load(html);
             List<string> data = new List<string>();
 
             HtmlNode[] nodes = htmlDoc.DocumentNode.SelectNodes("//td").ToArray();
-            string close = "";
+            List<string> results = new List<string>();
             foreach (HtmlNode item in nodes)
             {
-                data.Add(item.ToString());
-                close += item.InnerText;
+                results.Add(item.InnerText + "\n");
             }
-
-            //mossResultsTextBox.Text = nodes[0].InnerText;
-            //mossResultsTextBox.Text += nodes[1].InnerText;
-            //mossResultsTextBox.Text += nodes[2].InnerText;
-            data.ToArray();
-
-            mossResultsTextBox.Text = close;
+            string[] r = results.ToArray();
+            string completeResults = "";
+            foreach (string s in r)
+            {
+                completeResults += s;
+            }
+            mossResultsTextBox.Text = completeResults;
+        }
+        public string getBetween(string strSource, string strStart, string strEnd)
+        {
+            if (strSource.Contains(strStart) && strSource.Contains(strEnd))
+            {
+                int Start, End;
+                Start = strSource.IndexOf(strStart, 0) + strStart.Length;
+                End = strSource.IndexOf(strEnd, Start);
+                return strSource.Substring(Start, End - Start);
+            }
+            return "";
         }
 
         private void mossResultsTextBox_TextChanged(object sender, EventArgs e)
