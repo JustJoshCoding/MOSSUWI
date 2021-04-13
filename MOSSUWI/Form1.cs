@@ -13,7 +13,12 @@ using System.Windows.Forms;
 using System.Security.AccessControl;
 using System.Runtime.InteropServices;
 using Microsoft.Azure.Amqp.Framing;
-
+using HtmlAgilityPack;
+using FireSharp.Config;
+using FireSharp.Interfaces;
+using FireSharp.Response;
+using FireSharp;
+using System.Text.RegularExpressions;
 
 namespace MOSSUWI
 {
@@ -21,15 +26,33 @@ namespace MOSSUWI
     {
         protected string zipPath = @"";
         protected string extractPath = @"";
-        
+        protected List<string> flaggedStudents = new List<string>();
+        protected List<string> students = new List<string>();
+        protected string ext = "";
+        private static IFirebaseConfig config = new FirebaseConfig
+        {
+            AuthSecret = "dfadqKovUbxz2GKPM0H0fnc3kOE6R8sY9spW2rY8",
+            BasePath = "https://mossuwi-default-rtdb.firebaseio.com/"
+        };
+        IFirebaseClient client;
 
         public Form1()
         {
             InitializeComponent();
-        }
 
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            client = new FirebaseClient(config);
+            if (client != null)
+            {
+                MessageBox.Show("Connection to FireBase Established!");
+            }
+            ExtractButton.Visible = false;
+        }
         private void selectArchive_Click(object sender, EventArgs e)
         {
+            ExtractButton.Visible = true;
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -60,7 +83,7 @@ namespace MOSSUWI
             // Data structure to hold names of subfolders to be
             // examined for files.
             Stack<string> dirs = new Stack<string>(20);
-            
+
             if (!System.IO.Directory.Exists(root))
             {
                 throw new ArgumentException();
@@ -71,11 +94,11 @@ namespace MOSSUWI
             {
                 string currentDir = dirs.Pop();
                 string[] subDirs;
-                
+
                 try
                 {
                     subDirs = System.IO.Directory.GetDirectories(currentDir);
-                    
+
                 }
                 catch (UnauthorizedAccessException e)
                 {
@@ -121,7 +144,10 @@ namespace MOSSUWI
                     foreach (string str in directoryEntries)
                     {
                         if (str.Contains("assignsubmission_file_"))
+                        {
                             studentFolder = str;
+                        }
+                            
                     }
                     string studentFolderAddress = Path.Combine(root, studentFolder);
                     try
@@ -135,12 +161,11 @@ namespace MOSSUWI
                             WalkDirectoryTree(currentDir, studentFolderAddress);
                         }
 
-                        else if (file.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
+                        else if (file.EndsWith(ext, StringComparison.OrdinalIgnoreCase))
                         {
                             string filename = Path.GetFileName(file);
                             string movePath = Path.Combine(studentFolderAddress, filename);
                             FileInfo fim = new FileInfo(movePath);
-                            MessageBox.Show(movePath);
                             if (!fim.Exists)
                             {
                                 File.Move(studentFolderAddress, movePath);
@@ -155,8 +180,8 @@ namespace MOSSUWI
                         }
                         else
                         {
-                            //flag student
-
+                            //flag student for not using .7z or .zip
+                            flaggedStudents.Add(studentFolder);
                         }
                     }
                     catch (System.IO.FileNotFoundException e)
@@ -167,12 +192,13 @@ namespace MOSSUWI
                         Debug.WriteLine(e.Message);
                         continue;
                     }
-                }   
+                }
             }
         }
+
         private void ExtractFiles1(string zipPath, string extractPath)
         {
-            string zPath = "7za.exe"; 
+            string zPath = "7za.exe";
             try
             {
                 ProcessStartInfo process = new ProcessStartInfo();
@@ -188,7 +214,7 @@ namespace MOSSUWI
                 //handle error
             }
         }
-        
+
         private void WalkDirectoryTree(string path, string stfa)
         {
             System.IO.FileInfo[] files = null;
@@ -223,14 +249,13 @@ namespace MOSSUWI
                     // want to open, delete or modify the file, then
                     // a try-catch block is required here to handle the case
                     // where the file has been deleted since the call to TraverseTree().
-                    if (fi.FullName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase))
+                    if (fi.FullName.EndsWith(ext, StringComparison.OrdinalIgnoreCase))
                     {
                         string destinationPath = Path.GetFullPath(Path.Combine(root.ToString(), fi.FullName));
 
                         string filename = Path.GetFileName(destinationPath);
                         string movePath = Path.Combine(stfa, filename);
                         FileInfo fim = new FileInfo(movePath);
-                        MessageBox.Show(movePath);
                         if (!fim.Exists)
                         {
                             File.Move(destinationPath, movePath);
@@ -259,7 +284,61 @@ namespace MOSSUWI
                 }
             }
         }
-        private void ExtractButton_Click(object sender, EventArgs e)
+        private void RenameAllStudentFolders(string path)
+        {
+            System.IO.FileInfo[] files = null;
+            System.IO.DirectoryInfo[] dirs = null;
+            System.Collections.Specialized.StringCollection log = new System.Collections.Specialized.StringCollection();
+            System.IO.DirectoryInfo root = new System.IO.DirectoryInfo(path);
+            // First, process all the files directly under this folder
+            try
+            {
+                dirs = root.GetDirectories();
+                files = root.GetFiles("*.*");
+            }
+            // This is thrown if even one of the files requires permissions greater
+            // than the application provides.
+            catch (UnauthorizedAccessException e)
+            {
+                // This code just writes out the message and continues to recurse.
+                // You may decide to do something different here. For example, you
+                // can try to elevate your privileges and access the file again.
+                log.Add(e.Message);
+            }
+
+            catch (System.IO.DirectoryNotFoundException e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+
+            if (dirs != null)
+            {
+                foreach (System.IO.DirectoryInfo dir in dirs)
+                {
+                    string studentFolder = "";
+                    string[] directoryEntries = dir.ToString().Split(Path.DirectorySeparatorChar);
+                    foreach (string str in directoryEntries)
+                    {
+                        if (str.Contains("assignsubmission_file_"))
+                        {
+                            studentFolder = Regex.Replace(str, @"\s+", "");
+                        }
+                    }
+                    string renamedPath = Path.Combine(path, studentFolder);
+                    Directory.Move(dir.ToString(), renamedPath);
+                    
+                }
+            }
+            if(files != null)
+            {
+                foreach (System.IO.FileInfo fi in files)
+                {
+                    students.Add(fi.FullName);
+                }
+            }
+            
+        }
+        private async void ExtractButton_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Please select an empty folder.");
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
@@ -270,17 +349,37 @@ namespace MOSSUWI
                     extractPath = dialog.SelectedPath;
                 }
             }
-            if (CheckDirectoryEmpty_Fast(extractPath) == true)
+            (string selectedLang2, string exten) = GetLanguage();
+            ext = exten;
+            if (ext != "")
             {
-                if (!String.IsNullOrEmpty(zipPath))
-
+                if (extractPath != "")
                 {
-                    ExtractFiles1(zipPath, extractPath);
-                    getFilesRecursive(extractPath);
+                    if (CheckDirectoryEmpty_Fast(extractPath) == true)
+                    {
+                        if (!String.IsNullOrEmpty(zipPath))
+
+                        {
+                            ExtractFiles1(zipPath, extractPath);
+                            getFilesRecursive(extractPath);
+                            String[] str = flaggedStudents.ToArray();
+                            await File.WriteAllLinesAsync("blacklist.txt", str);
+                            var data = new Data
+                            {
+                                Students = str
+                            };
+                            PushResponse response = await client.PushTaskAsync("Submission Flags", data);
+                        }
+                        else MessageBox.Show("Please select an Archive.");
+                    }
+                    else MessageBox.Show("Folder you selected is not empty.");
                 }
-                else MessageBox.Show("Please select an Archive.");
-            } 
-            else MessageBox.Show("Folder you selected is not empty.");
+                else MessageBox.Show("Folder Not selected.");
+            }
+            else MessageBox.Show("Please Select a Language before Extraction.");
+            
+            
+
         }
 
         private static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
@@ -352,192 +451,380 @@ namespace MOSSUWI
             }
             throw new DirectoryNotFoundException();
         }
-
-        private string[] findStudents(string str)
-        {
-            string[] studentList = new string[] {
-
-            };
-
-
-            
-            return studentList;
-        }
-
         //
+        private (string,string) GetLanguage()
+        {
+            string selectedLang = "";
+            string selectedLang2 = "";
+            selectedLang += langComboBox.Text; 
+            if (selectedLang == "Python")
+            {
+                selectedLang2 = "python";
+                ext = ".py";
+            }
+            if (selectedLang == "C#")
+            {
+                selectedLang2 = "csharp";
+                ext = ".cs";
+            }
+            if (selectedLang == "C++")
+            {
+                selectedLang2 = "cc";
+                ext = ".cpp";
+            }
+            if (selectedLang == "MIPS Assembly (.s)")
+            {
+                selectedLang2 = "mips";
+                ext = ".s";
+            }
+            if (selectedLang == "MIPS Assembly (.asm)")
+            {
+                selectedLang2 = "mips";
+                ext = ".asm";
+            }
+            if (selectedLang == "Visual Basic")
+            {
+                selectedLang2 = "vb";
+                ext = ".vb";
+            }
+            if (selectedLang == "A8086 Assembly (.s)")
+            {
+                selectedLang2 = "a8086";
+                ext = ".s";
+            }
+            if (selectedLang == "A8086 Assembly (.asm)")
+            {
+                selectedLang2 = "a8086";
+                ext = ".asm";
+            }
+            if (selectedLang == "PL/SQL (.pks)")
+            {
+                selectedLang2 = "plsql";
+                ext = ".pks";
+            }
+            if (selectedLang == "PL/SQL (.pkb)")
+            {
+                selectedLang2 = "plsql";
+                ext = ".pkb";
+            }
+            if (selectedLang == "ASCII")
+            {
+                selectedLang2 = "ascii";
+                ext = ".txt";
+            }
+            if (selectedLang == "Ada")
+            {
+                selectedLang2 = "ada";
+                ext = ".ada";
+            }
+            if (selectedLang == "C")
+            {
+                selectedLang2 = "c";
+                ext = ".c";
+            }
+            if (selectedLang == "FORTRAN (.f90)")
+            {
+                selectedLang2 = "fortran";
+                ext = ".f90";
+            }
+            if (selectedLang == "FORTRAN (.for)")
+            {
+                selectedLang2 = "fortran";
+                ext = ".for";
+            }
+            if (selectedLang == "FORTRAN (.f)")
+            {
+                selectedLang2 = "fortran";
+                ext = ".f";
+            }
+            if (selectedLang == "HCL2 (.pkr.hcl)")
+            {
+                selectedLang2 = "hcl2";
+                ext = ".pkr.hcl";
+            }
+            if (selectedLang == "HCL2 (.pkr.json)")
+            {
+                selectedLang2 = "hcl2";
+                ext = ".pkr.json";
+            }
+            if (selectedLang == "Haskell (.hs)")
+            {
+                selectedLang2 = "haskell";
+                ext = ".hs";
+            }
+            if (selectedLang == "Haskell (.lhs)")
+            {
+                selectedLang2 = "haskell";
+                ext = ".lhs";
+            }
+            if (selectedLang == "Haskell (.hs)")
+            {
+                selectedLang2 = "haskell";
+                ext = ".hs";
+            }
+            if (selectedLang == "Java")
+            {
+                selectedLang2 = "java";
+                ext = ".java";
+            }
+            if (selectedLang == "JavaScript")
+            {
+                selectedLang2 = "javascript";
+                ext = ".js";
+            }
+            if (selectedLang == "Lisp")
+            {
+                selectedLang2 = "lisp";
+                ext = ".lsp";
+            }
+            if (selectedLang == "ML")
+            {
+                selectedLang2 = "ml";
+                ext = ".ml";
+            }
+            if (selectedLang == "Matlab (.m)")
+            {
+                selectedLang2 = "matlab";
+                ext = ".m";
+            }
+            if (selectedLang == "Matlab (.mat)")
+            {
+                selectedLang2 = "matlab";
+                ext = ".mat";
+            }
+            if (selectedLang == "Pascal (.pas)")
+            {
+                selectedLang2 = "pascal";
+                ext = ".pas";
+            }
+            if (selectedLang == "Pascal (.pp)")
+            {
+                selectedLang2 = "pascal";
+                ext = ".pp";
+            }
+            if (selectedLang == "Prolog")
+            {
+                selectedLang2 = "prolog";
+                ext = ".pl";
+            }
+            if (selectedLang == "Scheme")
+            {
+                selectedLang2 = "scheme";
+                ext = ".scm";
+            }
+            if (selectedLang == "Spice (.lib)")
+            {
+                selectedLang2 = "spice";
+                ext = ".lib";
+            }
+            if (selectedLang == "Spice (.mod)")
+            {
+                selectedLang2 = "spice";
+                ext = ".mod";
+            }
+            if (selectedLang == "TCL")
+            {
+                selectedLang2 = "tcl";
+                ext = ".tcl";
+            }
+            if (selectedLang == "VHDL")
+            {
+                selectedLang2 = "vhdl";
+                ext = ".vhdl";
+            }
+            if (selectedLang == "Verilog")
+            {
+                selectedLang2 = "verilog";
+                ext = ".v";
+            }
+            return (selectedLang2, ext);
+        }
         private void button2_Click(object sender, EventArgs e) // Collates data from other GUI elemets and uploads to MOSS | Mimics Strawberry Perl Command Line
         {
-             string selectedLang = "";
-             string selectedLang2 = "";
-             selectedLang += langComboBox.Text; // if the spaces in Arguments throw errors, set variables to " " and concatenate specific texts
+            
+            (string selectedLang2, string ext) = GetLanguage();
+            string selectedReps = "";
+            selectedReps += " -m " + maxRepsUpDown.Text;
 
-             string selectedReps = "";
-             selectedReps += " -m " + maxRepsUpDown.Text;
-
-             string customText = "";
-             while (!String.IsNullOrEmpty(customTextTextBox.Text))
-             {
-                 customText += " -c " + customTextTextBox.Text;
-             }
-
-             string baseFile = "";
-             while (!String.IsNullOrEmpty(baseFileTextBox.Text))
-             {
-                 baseFile += " -b " + baseFileTextBox.Text;
-             }
-
-             string groupFiles = "";
-             if (groupFilesCheckBox.Checked)
-             {
-                 groupFiles += " -d";
-             }
-
-             string maxMatching = " -n " + maxMatchingFilesUpDown.Text;
-
-             if (selectedLang == "Python")
-             {
-                 selectedLang2 = "python";
-             }
-             if (selectedLang == "C#")
-             {
-                 selectedLang2 = "csharp";
-             }
-             if (selectedLang == "C++")
-             {
-                 selectedLang2 = "cc";
-             }
-             if (selectedLang == "MIPS Assembly")
-             {
-                 selectedLang2 = "mips";
-             }
-             if (selectedLang == "Visual Basic")
-             {
-                 selectedLang2 = "vb";
-             }
-             if (selectedLang == "A8086 Assembly")
-             {
-                 selectedLang2 = "a8086";
-             }
-             if (selectedLang == "PL/SQL")
-             {
-                 selectedLang2 = "plsql";
-             }
-
-             //string line = "";
-             ProcessStartInfo ps = new ProcessStartInfo();
-             //Process process = new Process();
-             ps.RedirectStandardOutput = true;
-             ps.UseShellExecute = false;
-             //ps.CreateNoWindow = true;
-             ps.FileName = "cmd.exe";
-             ps.WindowStyle = ProcessWindowStyle.Normal;
-             ps.Arguments = @"/k cd C:\Users\shani\Documents && perl moss.pl -l " + selectedLang2 + groupFiles + baseFile + maxMatching + selectedReps + customText + " test1.py test2.py"; // *.py
-             //ps.Arguments = @"/k cd C:\Users\shani\Documents && perl moss.pl -l python test1.py test2.py";
-             //ps.Arguments = @"/k perl C:\Users\shani\Documents\moss.pl -l python C:\Users\shani\Documents\test1.py C:\Users\shani\Documents\test2.py";
-             //Process.Start(ps);
-             //process.StartInfo.RedirectStandardOutput = true;
-             var process = Process.Start(ps);
-             var output = process.StandardOutput.ReadToEnd();
-             //process.WaitForExit();
-             MessageBox.Show(output);
-
-             int sub1 = output.IndexOf("http");
-             int sub2 = output.IndexOf("C:");
-             int sub3 = sub2 - sub1;
-
-             string substring = output.Substring(sub1, sub3);
-
-             textBox2.Text = substring;
-
+            string customText = "";
+            while (!String.IsNullOrEmpty(customTextTextBox.Text))
+            {
+                customText += " -c " + customTextTextBox.Text;
+            }
+            string baseFile = "";
+            while (!String.IsNullOrEmpty(baseFileTextBox.Text))
+            {
+                baseFile += " -b " + baseFileTextBox.Text;
+            }
+            string groupFiles = "";
+            if (groupFilesCheckBox.Checked)
+            {
+                groupFiles += " -d";
+            }
+            string maxMatching = " -n " + maxMatchingFilesUpDown.Text;
+            RenameAllStudentFolders(extractPath);
+            if (ext != "")
+            {
+                string studentFiles = "";
+                students.ToArray();
+                foreach (string s in students)
+                {
+                    studentFiles += " " + s;
+                }
+                string mosspath = "";
+                MessageBox.Show("Select moss script.");
+                using (OpenFileDialog dialog = new OpenFileDialog())
+                {
+                    if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    {
+                        mosspath = dialog.FileName;
+                    }
+                }
+                
+                if (mosspath != "")
+                {
+                    ProcessStartInfo ps = new ProcessStartInfo();
+                    ps.RedirectStandardOutput = true;
+                    ps.UseShellExecute = false;
+                    ps.FileName = "cmd.exe";
+                    ps.WindowStyle = ProcessWindowStyle.Normal;
+                    ps.Arguments = @"/k perl " + mosspath + " -l " + selectedLang2 + groupFiles + baseFile + maxMatching + selectedReps + customText + studentFiles;
+                    var process = Process.Start(ps);
+                    var output = process.StandardOutput.ReadToEnd();
+                    MessageBox.Show(output);
+                    int sub1 = output.IndexOf("http");
+                    int sub2 = output.IndexOf("C:");
+                    int sub3 = sub2 - sub1;
+                    string substring = output.Substring(sub1, sub3);
+                    textBox2.Text = substring;
+                    //2 Zingers for $35 every Wednesday at KFC
+                }
+                else
+                {
+                    MessageBox.Show("Please Select Moss Script location.");
+                }
+            }
+            else MessageBox.Show("Please select Language.");
 
 
         }
 
-         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-         {
 
-         }
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
 
-         private void selectFolder_ItemClicked(object sender, EventArgs e)
-         {
-             using (OpenFileDialog dialog = new OpenFileDialog())
-             {
-                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                 {
-                     textBox1.Text = dialog.FileName;
-                 }
-             }
-         }
+        }
 
-         private void langComboBox_SelectedIndexChanged(object sender, EventArgs e)
-         {
-             //var selection = this.langComboBox.GetItemText(this.langComboBox.SelectedItem);
-         }
+        private void selectFolder_ItemClicked(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    textBox1.Text = dialog.FileName;
+                }
+            }
+        }
 
-         private void printLangButton_Click(object sender, EventArgs e)
-         {
-             MessageBox.Show(langComboBox.Text);
-         }
+        private void langComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //var selection = this.langComboBox.GetItemText(this.langComboBox.SelectedItem);
+        }
 
-         private void maxRepsUpDown_ValueChanged(object sender, EventArgs e)
-         {
+        private void printLangButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(ext);
+        }
 
-         }
+        private void maxRepsUpDown_ValueChanged(object sender, EventArgs e)
+        {
 
-         private void printRepsButton_Click(object sender, EventArgs e)
-         {
-             MessageBox.Show(maxRepsUpDown.Text);
-         }
+        }
 
-         private void textBox1_TextChanged(object sender, EventArgs e)
-         {
+        private void printRepsButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(maxRepsUpDown.Text);
+        }
 
-         }
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
 
-         private void baseFileTextBox_TextChanged(object sender, EventArgs e)
-         {
+        }
 
-         }
+        private void baseFileTextBox_TextChanged(object sender, EventArgs e)
+        {
 
-         private void baseFileButton_Click(object sender, EventArgs e)
-         {
-             using (OpenFileDialog dialog = new OpenFileDialog())
-             {
-                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                 {
-                     baseFileTextBox.Text = dialog.FileName;
-                 }
-             }
-         }
+        }
 
-         private void baseFileTextBox_DragDrop(object sender, DragEventArgs e)
-         {
-             string[] files = e.Data.GetData(DataFormats.FileDrop) as string[]; // get all files droppeds  
-             if (files != null && files.Any())
-                 baseFileTextBox.Text = files.First(); //select the first one
-         }
+        private void baseFileButton_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    baseFileTextBox.Text = dialog.FileName;
+                }
+            }
+        }
 
-         private void baseFileTextBox_DragOver(object sender, DragEventArgs e)
-         {
-             if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                 e.Effect = DragDropEffects.Link;
-             else
-                 e.Effect = DragDropEffects.None;
-         }
+        private void baseFileTextBox_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[]; // get all files droppeds  
+            if (files != null && files.Any())
+                baseFileTextBox.Text = files.First(); //select the first one
+        }
 
-         private void customTextButton_Click(object sender, EventArgs e)
-         {
-             MessageBox.Show(customTextTextBox.Text);
-         }
+        private void baseFileTextBox_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Link;
+            else
+                e.Effect = DragDropEffects.None;
+        }
 
-         private void groupFilesCheckBox_CheckedChanged(object sender, EventArgs e)
-         {
-             //groupFilesCheckBox.Checked
-         }
+        private void customTextButton_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(customTextTextBox.Text);
+        }
 
-         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-         {
+        private void groupFilesCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            //groupFilesCheckBox.Checked
+        }
 
-         }
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void mossDownloadButton_Click(object sender, EventArgs e)
+        {
+            String url = textBox2.Text;
+            var html = @"http://moss.stanford.edu/results/1/3177155154730/";
+            HtmlWeb web = new HtmlWeb();
+            var htmlDoc = web.Load(html);
+            List<string> data = new List<string>();
+
+            HtmlNode[] nodes = htmlDoc.DocumentNode.SelectNodes("//td").ToArray();
+            string close = "";
+            foreach (HtmlNode item in nodes)
+            {
+                data.Add(item.ToString());
+                close += item.InnerText;
+            }
+
+            //mossResultsTextBox.Text = nodes[0].InnerText;
+            //mossResultsTextBox.Text += nodes[1].InnerText;
+            //mossResultsTextBox.Text += nodes[2].InnerText;
+            data.ToArray();
+
+            mossResultsTextBox.Text = close;
+        }
+
+        private void mossResultsTextBox_TextChanged(object sender, EventArgs e)
+        {
+            int location = mossResultsTextBox.Find("%");
+            mossResultsTextBox.AppendText("\n" + location.ToString());
+        }
+
     }
 }

@@ -11,6 +11,9 @@
     <PackageReference Include="7-Zip.CommandLine" Version="18.1.0" />
     <PackageReference Include="7z.NET" Version="1.0.3" />
     <PackageReference Include="Aspose.Zip" Version="21.4.0" />
+    <PackageReference Include="FirebaseAdmin" Version="2.0.0" />
+    <PackageReference Include="FireSharp.Serialization.JsonNet" Version="1.1.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.32" />
     <PackageReference Include="Microsoft.Azure.Amqp" Version="2.4.13" />
     <PackageReference Include="Microsoft.Graph" Version="3.29.0" />
     <PackageReference Include="SharpCompress" Version="0.28.1" />

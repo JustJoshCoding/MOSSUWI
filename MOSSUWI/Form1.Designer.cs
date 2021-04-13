@@ -1,7 +1,4 @@
-﻿
-
-
-namespace MOSSUWI
+﻿namespace MOSSUWI
 {
     partial class Form1
     {
@@ -48,6 +45,8 @@ namespace MOSSUWI
             this.maxMatchingFilesUpDown = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
+            this.mossDownloadButton = new System.Windows.Forms.Button();
+            this.mossResultsTextBox = new System.Windows.Forms.RichTextBox();
             this.selectArchive = new System.Windows.Forms.Button();
             this.ExtractButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
@@ -71,7 +70,7 @@ namespace MOSSUWI
             this.button2.Location = new System.Drawing.Point(186, 345);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(127, 20);
+            this.button2.Size = new System.Drawing.Size(145, 28);
             this.button2.TabIndex = 2;
             this.button2.Text = "MOSS Upload";
             this.button2.UseVisualStyleBackColor = true;
@@ -85,7 +84,7 @@ namespace MOSSUWI
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
-            this.menuStrip1.Size = new System.Drawing.Size(490, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(901, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
@@ -109,29 +108,43 @@ namespace MOSSUWI
             // 
             this.langComboBox.FormattingEnabled = true;
             this.langComboBox.Items.AddRange(new object[] {
-            "A8086 Assembly",
+            "A8086 Assembly (.asm)",
+            "A8086 Assembly (.s)",
             "ASCII",
             "Ada",
             "C",
             "C#",
             "C++",
-            "FORTRAN",
-            "HCL2",
-            "Haskell",
+            "FORTRAN (.f)",
+            "FORTRAN (.f90)",
+            "FORTRAN (.for)",
+            "HCL2 (.pkr.hcl)",
+            "HCL2 (.pkr.json)",
+            "Haskell (.hs)",
+            "Haskell (.lhs)",
             "Java",
             "JavaScript",
             "Lisp",
-            "MIPS Assembly",
+            "MIPS Assembly (.asm)",
+            "MIPS Assembly (.s)",
             "ML",
-            "Matlab",
-            "Modula2",
-            "Pascal",
+            "Matlab (.m)",
+            "Matlab (.mat)",
+            "Modula-2 (.def)",
+            "Modula-2 (.m2)",
+            "Modula-2 (.md)",
+            "Modula-2 (.mi)",
+            "Modula-2 (.mod)",
+            "PL/SQL (.pkb)",
+            "PL/SQL (.pks)",
+            "Pascal (.pas)",
+            "Pascal (.pp)",
             "Perl",
-            "PL/SQL",
             "Prolog",
             "Python",
             "Scheme",
-            "Spice",
+            "Spice (.lib)",
+            "Spice (.mod)",
             "TCL",
             "VHDL",
             "Verilog",
@@ -286,22 +299,44 @@ namespace MOSSUWI
             this.textBox2.Size = new System.Drawing.Size(106, 23);
             this.textBox2.TabIndex = 16;
             // 
+            // mossDownloadButton
+            // 
+            this.mossDownloadButton.Location = new System.Drawing.Point(350, 390);
+            this.mossDownloadButton.Margin = new System.Windows.Forms.Padding(2);
+            this.mossDownloadButton.Name = "mossDownloadButton";
+            this.mossDownloadButton.Size = new System.Drawing.Size(127, 20);
+            this.mossDownloadButton.TabIndex = 17;
+            this.mossDownloadButton.Text = "MOSS Download";
+            this.mossDownloadButton.UseVisualStyleBackColor = true;
+            this.mossDownloadButton.Click += new System.EventHandler(this.mossDownloadButton_Click);
+            // 
+            // mossResultsTextBox
+            // 
+            this.mossResultsTextBox.Location = new System.Drawing.Point(529, 45);
+            this.mossResultsTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.mossResultsTextBox.Name = "mossResultsTextBox";
+            this.mossResultsTextBox.ReadOnly = true;
+            this.mossResultsTextBox.Size = new System.Drawing.Size(361, 500);
+            this.mossResultsTextBox.TabIndex = 18;
+            this.mossResultsTextBox.Text = "";
+            this.mossResultsTextBox.TextChanged += new System.EventHandler(this.mossResultsTextBox_TextChanged);
+            // 
             // selectArchive
             // 
-            this.selectArchive.Location = new System.Drawing.Point(303, 43);
+            this.selectArchive.Location = new System.Drawing.Point(331, 44);
             this.selectArchive.Name = "selectArchive";
             this.selectArchive.Size = new System.Drawing.Size(97, 23);
-            this.selectArchive.TabIndex = 17;
+            this.selectArchive.TabIndex = 19;
             this.selectArchive.Text = "Select Archive";
             this.selectArchive.UseVisualStyleBackColor = true;
             this.selectArchive.Click += new System.EventHandler(this.selectArchive_Click);
             // 
             // ExtractButton
             // 
-            this.ExtractButton.Location = new System.Drawing.Point(406, 44);
+            this.ExtractButton.Location = new System.Drawing.Point(449, 43);
             this.ExtractButton.Name = "ExtractButton";
             this.ExtractButton.Size = new System.Drawing.Size(75, 23);
-            this.ExtractButton.TabIndex = 18;
+            this.ExtractButton.TabIndex = 20;
             this.ExtractButton.Text = "Extract";
             this.ExtractButton.UseVisualStyleBackColor = true;
             this.ExtractButton.Click += new System.EventHandler(this.ExtractButton_Click);
@@ -310,9 +345,11 @@ namespace MOSSUWI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(490, 424);
+            this.ClientSize = new System.Drawing.Size(901, 592);
             this.Controls.Add(this.ExtractButton);
             this.Controls.Add(this.selectArchive);
+            this.Controls.Add(this.mossResultsTextBox);
+            this.Controls.Add(this.mossDownloadButton);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.maxMatchingFilesUpDown);
@@ -331,6 +368,7 @@ namespace MOSSUWI
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxRepsUpDown)).EndInit();
@@ -359,8 +397,9 @@ namespace MOSSUWI
         private System.Windows.Forms.NumericUpDown maxMatchingFilesUpDown;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Button mossDownloadButton;
+        private System.Windows.Forms.RichTextBox mossResultsTextBox;
         private System.Windows.Forms.Button selectArchive;
         private System.Windows.Forms.Button ExtractButton;
     }
 }
-
