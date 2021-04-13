@@ -294,7 +294,6 @@ namespace MOSSUWI
             try
             {
                 dirs = root.GetDirectories();
-                files = root.GetFiles("*.*");
             }
             // This is thrown if even one of the files requires permissions greater
             // than the application provides.
@@ -326,16 +325,20 @@ namespace MOSSUWI
                     }
                     string renamedPath = Path.Combine(path, studentFolder);
                     Directory.Move(dir.ToString(), renamedPath);
-                    
+                    DirectoryInfo d = new DirectoryInfo(renamedPath);
+                    files = d.GetFiles("*.*");
+                    if (files != null)
+                    {
+                        foreach (System.IO.FileInfo fi in files)
+                        {
+                            if (fi.FullName.EndsWith(ext, StringComparison.OrdinalIgnoreCase))
+                                students.Add(fi.FullName);
+                        }
+                    }
+
                 }
             }
-            if(files != null)
-            {
-                foreach (System.IO.FileInfo fi in files)
-                {
-                    students.Add(fi.FullName);
-                }
-            }
+            
             
         }
         private async void ExtractButton_Click(object sender, EventArgs e)
@@ -663,11 +666,13 @@ namespace MOSSUWI
             }
             string maxMatching = " -n " + maxMatchingFilesUpDown.Text;
             RenameAllStudentFolders(extractPath);
+
             if (ext != "")
             {
                 string studentFiles = "";
-                students.ToArray();
-                foreach (string s in students)
+                string[] studentFolders = students.ToArray();
+                
+                foreach (string s in studentFolders)
                 {
                     studentFiles += " " + s;
                 }
@@ -680,7 +685,7 @@ namespace MOSSUWI
                         mosspath = dialog.FileName;
                     }
                 }
-                
+                MessageBox.Show(studentFiles);
                 if (mosspath != "")
                 {
                     ProcessStartInfo ps = new ProcessStartInfo();
