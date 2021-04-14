@@ -30,6 +30,8 @@ namespace MOSSUWI
         protected List<string> students = new List<string>();
         protected string ext = "";
         protected string linkToResults = "";
+        protected string selectedCourse = "";
+        protected List<string> results = new List<string>();
         private static IFirebaseConfig config = new FirebaseConfig
         {
             AuthSecret = "dfadqKovUbxz2GKPM0H0fnc3kOE6R8sY9spW2rY8",
@@ -645,82 +647,80 @@ namespace MOSSUWI
         }
         private void button2_Click(object sender, EventArgs e) // Collates data from other GUI elemets and uploads to MOSS | Mimics Strawberry Perl Command Line
         {
-            
+            selectedCourse = GetCourseSelected();
             (string selectedLang2, string ext) = GetLanguage();
-            string selectedReps = "";
-            selectedReps += " -m " + maxRepsUpDown.Text;
+            if (selectedCourse == "" || selectedCourse == "Select Course")
+            {
+                MessageBox.Show("Please Select the Course Code First.");
+            }
+            else
+            {
+                string selectedReps = "";
+                selectedReps += " -m " + maxRepsUpDown.Text;
 
-            string customText = "";
-            while (!String.IsNullOrEmpty(customTextTextBox.Text))
-            {
-                customText += " -c " + customTextTextBox.Text;
-            }
-            string baseFile = "";
-            while (!String.IsNullOrEmpty(baseFileTextBox.Text))
-            {
-                baseFile += " -b " + baseFileTextBox.Text;
-            }
-            string groupFiles = "";
-            if (groupFilesCheckBox.Checked)
-            {
-                groupFiles += " -d";
-            }
-            string maxMatching = " -n " + maxMatchingFilesUpDown.Text;
-            RenameAllStudentFolders(extractPath);
-
-            if (ext != "")
-            {
-                string studentFiles = "";
-                string[] studentFolders = students.ToArray();
-                
-                foreach (string s in studentFolders)
+                string customText = "";
+                while (!String.IsNullOrEmpty(customTextTextBox.Text))
                 {
-                    studentFiles += " " + s;
+                    customText += " -c " + customTextTextBox.Text;
                 }
-                string mosspath = "";
-                MessageBox.Show("Select moss script.");
-                using (OpenFileDialog dialog = new OpenFileDialog())
+                string baseFile = "";
+                while (!String.IsNullOrEmpty(baseFileTextBox.Text))
                 {
-                    if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                    baseFile += " -b " + baseFileTextBox.Text;
+                }
+                string groupFiles = "";
+                if (groupFilesCheckBox.Checked)
+                {
+                    groupFiles += " -d";
+                }
+                string maxMatching = " -n " + maxMatchingFilesUpDown.Text;
+                RenameAllStudentFolders(extractPath);
+
+                if (ext != "")
+                {
+                    string studentFiles = "";
+                    string[] studentFolders = students.ToArray();
+
+                    foreach (string s in studentFolders)
                     {
-                        mosspath = dialog.FileName;
+                        studentFiles += " " + s;
                     }
-                }
-                if (mosspath != "")
-                {
-                    ProcessStartInfo ps = new ProcessStartInfo();
-                    ps.RedirectStandardOutput = true;
-                    ps.UseShellExecute = false;
-                    ps.FileName = "cmd.exe";
-                    ps.WindowStyle = ProcessWindowStyle.Normal;
-                    ps.Arguments = @"/k perl " + mosspath + " -l " + selectedLang2 + groupFiles + baseFile + maxMatching + selectedReps + customText + studentFiles;
-                    var process = Process.Start(ps);
-                    string output = process.StandardOutput.ReadToEnd();
-                    string[] results = output.Split("\n");
-                    MessageBox.Show(output);
-                    foreach (string res in results)
+                    string mosspath = "";
+                    MessageBox.Show("Select moss script.");
+                    using (OpenFileDialog dialog = new OpenFileDialog())
                     {
-                        if (res.Contains("http"))
+                        if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                         {
-                            linkToResults = res;
-                            textBox2.Text = res;
+                            mosspath = dialog.FileName;
                         }
                     }
+                    if (mosspath != "")
+                    {
+                        ProcessStartInfo ps = new ProcessStartInfo();
+                        ps.RedirectStandardOutput = true;
+                        ps.UseShellExecute = false;
+                        ps.FileName = "cmd.exe";
+                        ps.WindowStyle = ProcessWindowStyle.Normal;
+                        ps.Arguments = @"/k perl " + mosspath + " -l " + selectedLang2 + groupFiles + baseFile + maxMatching + selectedReps + customText + studentFiles;
+                        var process = Process.Start(ps);
+                        string output = process.StandardOutput.ReadToEnd();
+                        string[] results = output.Split("\n");
+                        foreach (string res in results)
+                        {
+                            if (res.Contains("http"))
+                            {
+                                linkToResults = res;
+                                textBox2.Text = res;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please Select Moss Script location.");
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("Please Select Moss Script location.");
-                }
+                else MessageBox.Show("Please select Language.");
             }
-            else MessageBox.Show("Please select Language.");
-
-
-        }
-
-
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
         }
 
         private void selectFolder_ItemClicked(object sender, EventArgs e)
@@ -733,37 +733,10 @@ namespace MOSSUWI
                 }
             }
         }
-
-        private void langComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //var selection = this.langComboBox.GetItemText(this.langComboBox.SelectedItem);
-        }
-
-        private void printLangButton_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(ext);
-        }
-
-        private void maxRepsUpDown_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void printRepsButton_Click(object sender, EventArgs e)
         {
             MessageBox.Show(maxRepsUpDown.Text);
         }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void baseFileTextBox_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
         private void baseFileButton_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
@@ -794,37 +767,31 @@ namespace MOSSUWI
         {
             MessageBox.Show(customTextTextBox.Text);
         }
-
-        private void groupFilesCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            //groupFilesCheckBox.Checked
-        }
-
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
         private void mossDownloadButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(linkToResults);
-            var html = linkToResults;
+            /*if (linkToResults != "")
+            {*/
+            var html = @"http://moss.stanford.edu/results/1/3177155154730/";
             HtmlWeb web = new HtmlWeb();
             var htmlDoc = web.Load(html);
-            List<string> data = new List<string>();
-
             HtmlNode[] nodes = htmlDoc.DocumentNode.SelectNodes("//td").ToArray();
-            List<string> results = new List<string>();
-            foreach (HtmlNode item in nodes)
+            
+            for (int i =0; i <= nodes.Length-3; i = i + 3)
             {
-                results.Add(item.InnerText + "\n");
+                string a = nodes[i].InnerText + "       " + nodes[i + 1].InnerText + "        " + nodes[i + 2].InnerText + "\r\n";
+                results.Add(a);
             }
             string[] r = results.ToArray();
-            string completeResults = "";
+            string completeResults = "File 1     File 2     Lines Repeated\r\n";
             foreach (string s in r)
             {
-                completeResults += s;
+                completeResults += s + "\r\n";
             }
-            mossResultsTextBox.Text = completeResults;
+
+            ReportBox.Text = completeResults;
+            /*}
+            else MessageBox.Show("Please Upload First.");*/
+            
         }
         public string getBetween(string strSource, string strStart, string strEnd)
         {
@@ -838,11 +805,48 @@ namespace MOSSUWI
             return "";
         }
 
-        private void mossResultsTextBox_TextChanged(object sender, EventArgs e)
+        private string GetCourseSelected()
         {
-            int location = mossResultsTextBox.Find("%");
-            mossResultsTextBox.AppendText("\n" + location.ToString());
+            string sc = SelectCourseComboBox.Text;
+            return sc;
         }
-
+        private (string, string) GetPercentagesSelected()
+        {
+            string f1p = file1PercentUpDown.Text;
+            string f2p = file2PercentUpDown.Text;
+            return (f1p,f2p);
+        }
+        private void GenerateReportButton_Click(object sender, EventArgs e)
+        {
+            (string f1p, string f2p) = GetPercentagesSelected();
+            int file1 = Int16.Parse(f1p);
+            int file2 = Int16.Parse(f2p);
+            string[] r = results.ToArray();
+            string customResults = "File 1     File 2     Lines Repeated\r\n";
+            
+            foreach (string s in r)
+            {
+                string p1="", p2 ="";
+                string[] sbp = s.Split();
+                bool fp = false;
+                foreach (string ch in sbp)
+                {
+                    if (ch.Contains("(") && fp == false)
+                    {
+                        p1 = getBetween(ch, "(", "%)");
+                        fp = true;
+                    }
+                    if (ch.Contains("(") && fp == true)
+                    {
+                        p2 = getBetween(ch, "(", "%)");
+                    }
+                }
+                if (Int16.Parse(p1) >= file1 || Int16.Parse(p2) >= file2)
+                {
+                    customResults += s + "\r\n";
+                }
+            }
+            ReportBox.Text = customResults;
+        }
     }
 }

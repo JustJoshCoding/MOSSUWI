@@ -46,12 +46,22 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.mossDownloadButton = new System.Windows.Forms.Button();
-            this.mossResultsTextBox = new System.Windows.Forms.RichTextBox();
             this.selectArchive = new System.Windows.Forms.Button();
             this.ExtractButton = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.GenerateReportButton = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.SelectCourseComboBox = new System.Windows.Forms.ComboBox();
+            this.file2PercentUpDown = new System.Windows.Forms.NumericUpDown();
+            this.ReportBox = new System.Windows.Forms.TextBox();
+            this.file1PercentUpDown = new System.Windows.Forms.NumericUpDown();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxRepsUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxMatchingFilesUpDown)).BeginInit();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.file2PercentUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.file1PercentUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
@@ -61,13 +71,12 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(247, 23);
             this.textBox1.TabIndex = 0;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             this.textBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox1_DragDrop);
             this.textBox1.DragOver += new System.Windows.Forms.DragEventHandler(this.textBox1_DragOver);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(186, 345);
+            this.button2.Location = new System.Drawing.Point(63, 339);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(145, 28);
@@ -84,10 +93,9 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
-            this.menuStrip1.Size = new System.Drawing.Size(901, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1457, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
-            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // file
             // 
@@ -155,7 +163,6 @@
             this.langComboBox.Size = new System.Drawing.Size(129, 23);
             this.langComboBox.TabIndex = 5;
             this.langComboBox.Text = "Select Language";
-            this.langComboBox.SelectedIndexChanged += new System.EventHandler(this.langComboBox_SelectedIndexChanged);
             // 
             // printLangButton
             // 
@@ -166,7 +173,6 @@
             this.printLangButton.TabIndex = 6;
             this.printLangButton.Text = "Print Language";
             this.printLangButton.UseVisualStyleBackColor = true;
-            this.printLangButton.Click += new System.EventHandler(this.printLangButton_Click);
             // 
             // maxRepsUpDown
             // 
@@ -190,7 +196,6 @@
             0,
             0,
             0});
-            this.maxRepsUpDown.ValueChanged += new System.EventHandler(this.maxRepsUpDown_ValueChanged);
             // 
             // printRepsButton
             // 
@@ -211,7 +216,6 @@
             this.baseFileTextBox.Name = "baseFileTextBox";
             this.baseFileTextBox.Size = new System.Drawing.Size(247, 23);
             this.baseFileTextBox.TabIndex = 9;
-            this.baseFileTextBox.TextChanged += new System.EventHandler(this.baseFileTextBox_TextChanged);
             this.baseFileTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.baseFileTextBox_DragDrop);
             this.baseFileTextBox.DragOver += new System.Windows.Forms.DragEventHandler(this.baseFileTextBox_DragOver);
             // 
@@ -255,7 +259,6 @@
             this.groupFilesCheckBox.TabIndex = 13;
             this.groupFilesCheckBox.Text = "Group Files by Directory";
             this.groupFilesCheckBox.UseVisualStyleBackColor = true;
-            this.groupFilesCheckBox.CheckedChanged += new System.EventHandler(this.groupFilesCheckBox_CheckedChanged);
             // 
             // maxMatchingFilesUpDown
             // 
@@ -279,7 +282,6 @@
             0,
             0,
             0});
-            this.maxMatchingFilesUpDown.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
             // label1
             // 
@@ -293,10 +295,10 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(85, 392);
+            this.textBox2.Location = new System.Drawing.Point(12, 392);
             this.textBox2.Margin = new System.Windows.Forms.Padding(2);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(246, 23);
+            this.textBox2.Size = new System.Drawing.Size(319, 23);
             this.textBox2.TabIndex = 16;
             // 
             // mossDownloadButton
@@ -309,17 +311,6 @@
             this.mossDownloadButton.Text = "MOSS Download";
             this.mossDownloadButton.UseVisualStyleBackColor = true;
             this.mossDownloadButton.Click += new System.EventHandler(this.mossDownloadButton_Click);
-            // 
-            // mossResultsTextBox
-            // 
-            this.mossResultsTextBox.Location = new System.Drawing.Point(529, 45);
-            this.mossResultsTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.mossResultsTextBox.Name = "mossResultsTextBox";
-            this.mossResultsTextBox.ReadOnly = true;
-            this.mossResultsTextBox.Size = new System.Drawing.Size(361, 500);
-            this.mossResultsTextBox.TabIndex = 18;
-            this.mossResultsTextBox.Text = "";
-            this.mossResultsTextBox.TextChanged += new System.EventHandler(this.mossResultsTextBox_TextChanged);
             // 
             // selectArchive
             // 
@@ -341,14 +332,99 @@
             this.ExtractButton.UseVisualStyleBackColor = true;
             this.ExtractButton.Click += new System.EventHandler(this.ExtractButton_Click);
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.file1PercentUpDown);
+            this.panel1.Controls.Add(this.file2PercentUpDown);
+            this.panel1.Controls.Add(this.GenerateReportButton);
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.label2);
+            this.panel1.Location = new System.Drawing.Point(12, 436);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(494, 296);
+            this.panel1.TabIndex = 22;
+            // 
+            // GenerateReportButton
+            // 
+            this.GenerateReportButton.Location = new System.Drawing.Point(390, 252);
+            this.GenerateReportButton.Name = "GenerateReportButton";
+            this.GenerateReportButton.Size = new System.Drawing.Size(75, 23);
+            this.GenerateReportButton.TabIndex = 24;
+            this.GenerateReportButton.Text = "Generate";
+            this.GenerateReportButton.UseVisualStyleBackColor = true;
+            this.GenerateReportButton.Click += new System.EventHandler(this.GenerateReportButton_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(208, 17);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(114, 15);
+            this.label3.TabIndex = 23;
+            this.label3.Text = "Custom Report Area";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(25, 87);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(210, 15);
+            this.label2.TabIndex = 22;
+            this.label2.Text = "Select Maximum Similarity Percentage";
+            // 
+            // SelectCourseComboBox
+            // 
+            this.SelectCourseComboBox.FormattingEnabled = true;
+            this.SelectCourseComboBox.Items.AddRange(new object[] {
+            "COMP 1601",
+            "COMP 1602",
+            "COMP 1603",
+            "COMP 2611",
+            "COMP 2603",
+            "INFO 2602",
+            "INFO 2604",
+            "COMP 3606",
+            "COMP 3607"});
+            this.SelectCourseComboBox.Location = new System.Drawing.Point(356, 339);
+            this.SelectCourseComboBox.Name = "SelectCourseComboBox";
+            this.SelectCourseComboBox.Size = new System.Drawing.Size(121, 23);
+            this.SelectCourseComboBox.TabIndex = 25;
+            this.SelectCourseComboBox.Text = "Select Course";
+            // 
+            // file2PercentUpDown
+            // 
+            this.file2PercentUpDown.Location = new System.Drawing.Point(357, 85);
+            this.file2PercentUpDown.Name = "file2PercentUpDown";
+            this.file2PercentUpDown.Size = new System.Drawing.Size(59, 23);
+            this.file2PercentUpDown.TabIndex = 25;
+            // 
+            // ReportBox
+            // 
+            this.ReportBox.Location = new System.Drawing.Point(599, 27);
+            this.ReportBox.Multiline = true;
+            this.ReportBox.Name = "ReportBox";
+            this.ReportBox.ReadOnly = true;
+            this.ReportBox.Size = new System.Drawing.Size(846, 744);
+            this.ReportBox.TabIndex = 26;
+            this.ReportBox.WordWrap = false;
+            // 
+            // file1PercentUpDown
+            // 
+            this.file1PercentUpDown.Location = new System.Drawing.Point(275, 85);
+            this.file1PercentUpDown.Name = "file1PercentUpDown";
+            this.file1PercentUpDown.Size = new System.Drawing.Size(59, 23);
+            this.file1PercentUpDown.TabIndex = 26;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(901, 592);
+            this.ClientSize = new System.Drawing.Size(1457, 792);
+            this.Controls.Add(this.ReportBox);
+            this.Controls.Add(this.SelectCourseComboBox);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.ExtractButton);
             this.Controls.Add(this.selectArchive);
-            this.Controls.Add(this.mossResultsTextBox);
             this.Controls.Add(this.mossDownloadButton);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label1);
@@ -373,6 +449,10 @@
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxRepsUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxMatchingFilesUpDown)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.file2PercentUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.file1PercentUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -398,8 +478,15 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button mossDownloadButton;
-        private System.Windows.Forms.RichTextBox mossResultsTextBox;
         private System.Windows.Forms.Button selectArchive;
         private System.Windows.Forms.Button ExtractButton;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button GenerateReportButton;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox SelectCourseComboBox;
+        private System.Windows.Forms.NumericUpDown file2PercentUpDown;
+        private System.Windows.Forms.TextBox ReportBox;
+        private System.Windows.Forms.NumericUpDown file1PercentUpDown;
     }
 }
