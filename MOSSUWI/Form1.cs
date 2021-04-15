@@ -928,11 +928,12 @@ namespace MOSSUWI
             dataGridView1.Columns.Add("Key", "Key");
             dataGridView1.Columns.Add("ID", "ID");
             dataGridView1.Columns.Add("Name", "Name");
-            dataGridView1.Columns.Add("Percentage_Coppied", "Percentage Coppied");
+            dataGridView1.Columns.Add("Percentage_Similar", "Percentage Similar");
             foreach(var item in data)
             {
                 dataGridView1.Rows.Add(item.Key, item.Value.ID, item.Value.Name, item.Value.Percentage_Coppied);
             }
         }
+
     }
 }
