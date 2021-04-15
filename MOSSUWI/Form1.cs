@@ -19,6 +19,7 @@ using FireSharp.Interfaces;
 using FireSharp.Response;
 using FireSharp;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace MOSSUWI
 {
@@ -31,7 +32,9 @@ namespace MOSSUWI
         protected string ext = "";
         protected string linkToResults = "";
         protected string selectedCourse = "";
-        protected List<string> results = new List<string>();
+        List<Result> results = new List<Result>();
+        protected int numRows;
+        protected string completeReselts = "ID       Student Name        File 1     Percentage      ID      Student Name     File 2    Percentage   Matched Lines\r\n";
         private static IFirebaseConfig config = new FirebaseConfig
         {
             AuthSecret = "dfadqKovUbxz2GKPM0H0fnc3kOE6R8sY9spW2rY8",
@@ -346,46 +349,47 @@ namespace MOSSUWI
         }
         private async void ExtractButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Please select an empty folder.");
-            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            if (SelectCourseComboBox.Text != "Select Course")
             {
-                DialogResult result = dialog.ShowDialog();
-                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
+                MessageBox.Show("Please select an empty folder.");
+                using (FolderBrowserDialog dialog = new FolderBrowserDialog())
                 {
-                    extractPath = dialog.SelectedPath;
-                }
-            }
-            (string selectedLang2, string exten) = GetLanguage();
-            ext = exten;
-            if (ext != "")
-            {
-                if (extractPath != "")
-                {
-                    if (CheckDirectoryEmpty_Fast(extractPath) == true)
+                    DialogResult result = dialog.ShowDialog();
+                    if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(dialog.SelectedPath))
                     {
-                        if (!String.IsNullOrEmpty(zipPath))
-
-                        {
-                            ExtractFiles1(zipPath, extractPath);
-                            getFilesRecursive(extractPath);
-                            String[] str = flaggedStudents.ToArray();
-                            await File.WriteAllLinesAsync("blacklist.txt", str);
-                            var data = new Data
-                            {
-                                Students = str
-                            };
-                            PushResponse response = await client.PushTaskAsync("Submission Flags", data);
-                        }
-                        else MessageBox.Show("Please select an Archive.");
+                        extractPath = dialog.SelectedPath;
                     }
-                    else MessageBox.Show("Folder you selected is not empty.");
                 }
-                else MessageBox.Show("Folder Not selected.");
-            }
-            else MessageBox.Show("Please Select a Language before Extraction.");
-            
-            
+                (string selectedLang2, string exten) = GetLanguage();
+                ext = exten;
+                if (ext != "")
+                {
+                    if (extractPath != "")
+                    {
+                        if (CheckDirectoryEmpty_Fast(extractPath) == true)
+                        {
+                            if (!String.IsNullOrEmpty(zipPath))
 
+                            {
+                                ExtractFiles1(zipPath, extractPath);
+                                getFilesRecursive(extractPath);
+                                String[] str = flaggedStudents.ToArray();
+                                await File.WriteAllLinesAsync("blacklist.txt", str);
+                                var data = new Data
+                                {
+                                    Students = str
+                                };
+                                PushResponse response = await client.PushTaskAsync("Submission Flags" + GetCourseSelected() + "/" + selectedYear.Text + "/", data);
+                            }
+                            else MessageBox.Show("Please select an Archive.");
+                        }
+                        else MessageBox.Show("Folder you selected is not empty.");
+                    }
+                    else MessageBox.Show("Folder Not selected.");
+                }
+                else MessageBox.Show("Please Select a Language before Extraction.");
+            }
+            else MessageBox.Show("Please Select a Course");
         }
 
         private static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
@@ -702,8 +706,9 @@ namespace MOSSUWI
                         ps.FileName = "cmd.exe";
                         ps.WindowStyle = ProcessWindowStyle.Normal;
                         ps.Arguments = @"/k perl " + mosspath + " -l " + selectedLang2 + groupFiles + baseFile + maxMatching + selectedReps + customText + studentFiles;
-                        var process = Process.Start(ps);
+                        Process process = Process.Start(ps);
                         string output = process.StandardOutput.ReadToEnd();
+                        process.WaitForExit();
                         string[] results = output.Split("\n");
                         foreach (string res in results)
                         {
@@ -769,29 +774,67 @@ namespace MOSSUWI
         }
         private void mossDownloadButton_Click(object sender, EventArgs e)
         {
-            /*if (linkToResults != "")
-            {*/
-            var html = @"http://moss.stanford.edu/results/1/3177155154730/";
-            HtmlWeb web = new HtmlWeb();
-            var htmlDoc = web.Load(html);
-            HtmlNode[] nodes = htmlDoc.DocumentNode.SelectNodes("//td").ToArray();
-            
-            for (int i =0; i <= nodes.Length-3; i = i + 3)
+            if (linkToResults != "")
             {
-                string a = nodes[i].InnerText + "       " + nodes[i + 1].InnerText + "        " + nodes[i + 2].InnerText + "\r\n";
-                results.Add(a);
+                int Count = 0;
+                
+                var html = linkToResults;
+                HtmlWeb web = new HtmlWeb();
+                var htmlDoc = web.Load(html);
+                HtmlNode[] nodes = htmlDoc.DocumentNode.SelectNodes("//td").ToArray();
+                
+                for (int i = 0; i <= nodes.Length - 3; i = i + 3)
+                {
+                    FileInfo fi1 = new FileInfo(nodes[i].InnerText);
+                    FileInfo fi2 = new FileInfo(nodes[i + 1].InnerText);
+                    string std1 = "", std2 = "", stdid1 = "", stdid2 = "";
+                    string[] de1 = nodes[i].InnerText.Split(Path.DirectorySeparatorChar);
+                    string[] de2 = nodes[i + 1].InnerText.Split(Path.DirectorySeparatorChar);
+                    foreach (string str in de1)
+                    {
+                        if (str.Contains("assignsubmission_file_"))
+                        {
+                            string[] a = str.Split("_");
+                            std1 = a[0];
+                            stdid1 = a[1];
+                        }
+                    }
+                    foreach (string str in de2)
+                    {
+                        if (str.Contains("assignsubmission_file_"))
+                        {
+                            string[] a = str.Split("_");
+                            std2 = a[0];
+                            stdid2 = a[1];
+                        }
+                    }
+                    string p1, p2;
+                    p1 = getBetween(nodes[i].InnerText, "(", "%)");
+                    p2 = getBetween(nodes[i+1].InnerText, "(", "%)");
+                    Result result = new Result
+                    {
+                        ID1 = stdid1,
+                        Name1 = std1,
+                        File1 = fi1.Name,
+                        P1 = p1,
+                        ID2 = stdid2,
+                        Name2 = std2,
+                        File2 = fi1.Name,
+                        P2 = p2,
+                        LinesMatched = nodes[i + 2].InnerText
+                    };
+                    results.Add(result);
+                    Count++;
+                }
+                for(int i = 0; i<Count; i++)
+                {
+                    completeReselts += results[i].ID1 + "   " + results[i].Name1 + "    " + results[i].File1 + "    " + results[i].ID2 + "  " + results[i].Name2 + "    " + results[i].File2 + "    " + results[i].LinesMatched + "\r\n";
+                }
+                ReportBox.Text = completeReselts;
+                numRows = Count;
             }
-            string[] r = results.ToArray();
-            string completeResults = "File 1     File 2     Lines Repeated\r\n";
-            foreach (string s in r)
-            {
-                completeResults += s + "\r\n";
-            }
+            else MessageBox.Show("Please Upload First.");
 
-            ReportBox.Text = completeResults;
-            /*}
-            else MessageBox.Show("Please Upload First.");*/
-            
         }
         public string getBetween(string strSource, string strStart, string strEnd)
         {
@@ -804,7 +847,6 @@ namespace MOSSUWI
             }
             return "";
         }
-
         private string GetCourseSelected()
         {
             string sc = SelectCourseComboBox.Text;
@@ -816,37 +858,81 @@ namespace MOSSUWI
             string f2p = file2PercentUpDown.Text;
             return (f1p,f2p);
         }
-        private void GenerateReportButton_Click(object sender, EventArgs e)
+        private async void GenerateReportButton_Click(object sender, EventArgs e)
         {
             (string f1p, string f2p) = GetPercentagesSelected();
             int file1 = Int16.Parse(f1p);
             int file2 = Int16.Parse(f2p);
-            string[] r = results.ToArray();
-            string customResults = "File 1     File 2     Lines Repeated\r\n";
-            
-            foreach (string s in r)
+            if (file1 > -1 || file2 > -1)
             {
-                string p1="", p2 ="";
-                string[] sbp = s.Split();
-                bool fp = false;
-                foreach (string ch in sbp)
+                string customResults = "ID     Student Name       File 1    Percentage   ID      Student Name     File 2     Percentage      Matched Lines\r\n";
+                for (int i = 0; i < numRows; i++)
                 {
-                    if (ch.Contains("(") && fp == false)
+                    if (Int16.Parse(results[i].P1) > file1 || Int16.Parse(results[i].P2) > file2)
                     {
-                        p1 = getBetween(ch, "(", "%)");
-                        fp = true;
-                    }
-                    if (ch.Contains("(") && fp == true)
-                    {
-                        p2 = getBetween(ch, "(", "%)");
+                        customResults += results[i].ID1 + "   " + results[i].Name1 + "    " + results[i].File1 + "    " + results[i].ID2 + "  " + results[i].Name2 + "    " + results[i].File2 + "    " + results[i].LinesMatched + "\r\n";
+                        var flag1 = new Flag
+                        {
+                            ID = results[i].ID1,
+                            Name = results[i].Name1,
+                            Percentage_Coppied = results[i].P1
+                        };
+                        var flag2 = new Flag
+                        {
+                            ID = results[i].ID2,
+                            Name = results[i].Name2,
+                            Percentage_Coppied = results[i].P2
+                        };
+                        PushResponse response1 = await client.PushTaskAsync("Submission Similarity Reports/" + GetCourseSelected() + "/" + selectedYear.Text + "/", flag1);
+                        PushResponse response2 = await client.PushTaskAsync("Submission Similarity Reports/" + GetCourseSelected() + "/" + selectedYear.Text + "/", flag2);
                     }
                 }
-                if (Int16.Parse(p1) >= file1 || Int16.Parse(p2) >= file2)
-                {
-                    customResults += s + "\r\n";
-                }
+                this.ReportBox.Text = customResults;
             }
-            ReportBox.Text = customResults;
+            else this.ReportBox.Text = completeReselts;
+        }
+        private void SearchStudent_Click(object sender, EventArgs e)
+        {
+            string studentID = IDtextBox.Text;
+            if (studentID != "" && studentID != "ID")
+            {
+                
+                string customResults = "ID      Student Name        File 1      Percentage      ID      Student Name        File 2      Percentage      Matched Lines\r\n";
+
+                for (int i = 0; i<numRows;i++)
+                {
+                    
+                    if (String.Equals(results[i].ID1, studentID) || String.Equals(results[i].ID2, studentID))
+                    {
+                        customResults += results[i].ID1 + "   " + results[i].Name1 + "    " + results[i].File1 + "    " + results[i].ID2 + "  " + results[i].Name2 + "    " + results[i].File2 + "    " + results[i].LinesMatched + "\r\n";
+                    }
+                    
+                }
+                this.ReportBox.Text = customResults;
+            }
+            else this.ReportBox.Text = completeReselts;
+        }
+
+        private void Retrieve_Click(object sender, EventArgs e)
+        {
+            FirebaseResponse response =  client.Get("Submission Similarity Reports/" + GetCourseSelected() + "/" + selectedYear.Text + "/");
+            Dictionary<string, Flag> data = JsonConvert.DeserializeObject<Dictionary<string, Flag>>(response.Body.ToString());
+            //string ret = "ID    Student Name    Percentage Coppied\r\n";
+            PopulateDataGrid(data);
+        }
+        void PopulateDataGrid(Dictionary<string, Flag> data)
+        {
+            dataGridView1.Rows.Clear();
+            dataGridView1.Columns.Clear();
+
+            dataGridView1.Columns.Add("Key", "Key");
+            dataGridView1.Columns.Add("ID", "ID");
+            dataGridView1.Columns.Add("Name", "Name");
+            dataGridView1.Columns.Add("Percentage_Coppied", "Percentage Coppied");
+            foreach(var item in data)
+            {
+                dataGridView1.Rows.Add(item.Key, item.Value.ID, item.Value.Name, item.Value.Percentage_Coppied);
+            }
         }
     }
 }

@@ -34,9 +34,7 @@
             this.file = new System.Windows.Forms.ToolStripMenuItem();
             this.selectFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.langComboBox = new System.Windows.Forms.ComboBox();
-            this.printLangButton = new System.Windows.Forms.Button();
             this.maxRepsUpDown = new System.Windows.Forms.NumericUpDown();
-            this.printRepsButton = new System.Windows.Forms.Button();
             this.baseFileTextBox = new System.Windows.Forms.TextBox();
             this.baseFileButton = new System.Windows.Forms.Button();
             this.customTextTextBox = new System.Windows.Forms.TextBox();
@@ -49,25 +47,36 @@
             this.selectArchive = new System.Windows.Forms.Button();
             this.ExtractButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.Retrieve = new System.Windows.Forms.Button();
+            this.IDtextBox = new System.Windows.Forms.TextBox();
+            this.SearchStudent = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.file1PercentUpDown = new System.Windows.Forms.NumericUpDown();
+            this.file2PercentUpDown = new System.Windows.Forms.NumericUpDown();
             this.GenerateReportButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.SelectCourseComboBox = new System.Windows.Forms.ComboBox();
-            this.file2PercentUpDown = new System.Windows.Forms.NumericUpDown();
             this.ReportBox = new System.Windows.Forms.TextBox();
-            this.file1PercentUpDown = new System.Windows.Forms.NumericUpDown();
+            this.printLangButton = new System.Windows.Forms.Button();
+            this.printRepsButton = new System.Windows.Forms.Button();
+            this.selectedYear = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxRepsUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxMatchingFilesUpDown)).BeginInit();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.file2PercentUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.file1PercentUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.file2PercentUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.selectedYear)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
             // 
             this.textBox1.AllowDrop = true;
-            this.textBox1.Location = new System.Drawing.Point(37, 44);
+            this.textBox1.Location = new System.Drawing.Point(37, 50);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(247, 23);
             this.textBox1.TabIndex = 0;
@@ -93,7 +102,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
-            this.menuStrip1.Size = new System.Drawing.Size(1457, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1900, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -164,16 +173,6 @@
             this.langComboBox.TabIndex = 5;
             this.langComboBox.Text = "Select Language";
             // 
-            // printLangButton
-            // 
-            this.printLangButton.Location = new System.Drawing.Point(208, 88);
-            this.printLangButton.Margin = new System.Windows.Forms.Padding(2);
-            this.printLangButton.Name = "printLangButton";
-            this.printLangButton.Size = new System.Drawing.Size(123, 20);
-            this.printLangButton.TabIndex = 6;
-            this.printLangButton.Text = "Print Language";
-            this.printLangButton.UseVisualStyleBackColor = true;
-            // 
             // maxRepsUpDown
             // 
             this.maxRepsUpDown.Location = new System.Drawing.Point(38, 127);
@@ -196,17 +195,6 @@
             0,
             0,
             0});
-            // 
-            // printRepsButton
-            // 
-            this.printRepsButton.Location = new System.Drawing.Point(208, 125);
-            this.printRepsButton.Margin = new System.Windows.Forms.Padding(2);
-            this.printRepsButton.Name = "printRepsButton";
-            this.printRepsButton.Size = new System.Drawing.Size(123, 20);
-            this.printRepsButton.TabIndex = 8;
-            this.printRepsButton.Text = "Print Max Reps";
-            this.printRepsButton.UseVisualStyleBackColor = true;
-            this.printRepsButton.Click += new System.EventHandler(this.printRepsButton_Click);
             // 
             // baseFileTextBox
             // 
@@ -314,7 +302,7 @@
             // 
             // selectArchive
             // 
-            this.selectArchive.Location = new System.Drawing.Point(331, 44);
+            this.selectArchive.Location = new System.Drawing.Point(331, 50);
             this.selectArchive.Name = "selectArchive";
             this.selectArchive.Size = new System.Drawing.Size(97, 23);
             this.selectArchive.TabIndex = 19;
@@ -324,7 +312,7 @@
             // 
             // ExtractButton
             // 
-            this.ExtractButton.Location = new System.Drawing.Point(449, 43);
+            this.ExtractButton.Location = new System.Drawing.Point(449, 50);
             this.ExtractButton.Name = "ExtractButton";
             this.ExtractButton.Size = new System.Drawing.Size(75, 23);
             this.ExtractButton.TabIndex = 20;
@@ -334,6 +322,10 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.Retrieve);
+            this.panel1.Controls.Add(this.IDtextBox);
+            this.panel1.Controls.Add(this.SearchStudent);
+            this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.file1PercentUpDown);
             this.panel1.Controls.Add(this.file2PercentUpDown);
             this.panel1.Controls.Add(this.GenerateReportButton);
@@ -344,13 +336,64 @@
             this.panel1.Size = new System.Drawing.Size(494, 296);
             this.panel1.TabIndex = 22;
             // 
+            // Retrieve
+            // 
+            this.Retrieve.Location = new System.Drawing.Point(382, 196);
+            this.Retrieve.Name = "Retrieve";
+            this.Retrieve.Size = new System.Drawing.Size(75, 23);
+            this.Retrieve.TabIndex = 30;
+            this.Retrieve.Text = "Retrieve";
+            this.Retrieve.UseVisualStyleBackColor = true;
+            this.Retrieve.Click += new System.EventHandler(this.Retrieve_Click);
+            // 
+            // IDtextBox
+            // 
+            this.IDtextBox.Location = new System.Drawing.Point(127, 134);
+            this.IDtextBox.Name = "IDtextBox";
+            this.IDtextBox.PlaceholderText = "ID";
+            this.IDtextBox.Size = new System.Drawing.Size(128, 23);
+            this.IDtextBox.TabIndex = 29;
+            // 
+            // SearchStudent
+            // 
+            this.SearchStudent.Location = new System.Drawing.Point(283, 133);
+            this.SearchStudent.Name = "SearchStudent";
+            this.SearchStudent.Size = new System.Drawing.Size(75, 23);
+            this.SearchStudent.TabIndex = 28;
+            this.SearchStudent.Text = "Search";
+            this.SearchStudent.UseVisualStyleBackColor = true;
+            this.SearchStudent.Click += new System.EventHandler(this.SearchStudent_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(26, 137);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(86, 15);
+            this.label4.TabIndex = 27;
+            this.label4.Text = "Student Search";
+            // 
+            // file1PercentUpDown
+            // 
+            this.file1PercentUpDown.Location = new System.Drawing.Point(250, 85);
+            this.file1PercentUpDown.Name = "file1PercentUpDown";
+            this.file1PercentUpDown.Size = new System.Drawing.Size(59, 23);
+            this.file1PercentUpDown.TabIndex = 26;
+            // 
+            // file2PercentUpDown
+            // 
+            this.file2PercentUpDown.Location = new System.Drawing.Point(319, 85);
+            this.file2PercentUpDown.Name = "file2PercentUpDown";
+            this.file2PercentUpDown.Size = new System.Drawing.Size(59, 23);
+            this.file2PercentUpDown.TabIndex = 25;
+            // 
             // GenerateReportButton
             // 
-            this.GenerateReportButton.Location = new System.Drawing.Point(390, 252);
+            this.GenerateReportButton.Location = new System.Drawing.Point(399, 83);
             this.GenerateReportButton.Name = "GenerateReportButton";
             this.GenerateReportButton.Size = new System.Drawing.Size(75, 23);
             this.GenerateReportButton.TabIndex = 24;
-            this.GenerateReportButton.Text = "Generate";
+            this.GenerateReportButton.Text = "Sort";
             this.GenerateReportButton.UseVisualStyleBackColor = true;
             this.GenerateReportButton.Click += new System.EventHandler(this.GenerateReportButton_Click);
             // 
@@ -391,35 +434,82 @@
             this.SelectCourseComboBox.TabIndex = 25;
             this.SelectCourseComboBox.Text = "Select Course";
             // 
-            // file2PercentUpDown
-            // 
-            this.file2PercentUpDown.Location = new System.Drawing.Point(357, 85);
-            this.file2PercentUpDown.Name = "file2PercentUpDown";
-            this.file2PercentUpDown.Size = new System.Drawing.Size(59, 23);
-            this.file2PercentUpDown.TabIndex = 25;
-            // 
             // ReportBox
             // 
-            this.ReportBox.Location = new System.Drawing.Point(599, 27);
+            this.ReportBox.BackColor = System.Drawing.SystemColors.Control;
+            this.ReportBox.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.ReportBox.ForeColor = System.Drawing.SystemColors.InfoText;
+            this.ReportBox.Location = new System.Drawing.Point(530, 45);
             this.ReportBox.Multiline = true;
             this.ReportBox.Name = "ReportBox";
             this.ReportBox.ReadOnly = true;
-            this.ReportBox.Size = new System.Drawing.Size(846, 744);
+            this.ReportBox.Size = new System.Drawing.Size(646, 687);
             this.ReportBox.TabIndex = 26;
-            this.ReportBox.WordWrap = false;
             // 
-            // file1PercentUpDown
+            // printLangButton
             // 
-            this.file1PercentUpDown.Location = new System.Drawing.Point(275, 85);
-            this.file1PercentUpDown.Name = "file1PercentUpDown";
-            this.file1PercentUpDown.Size = new System.Drawing.Size(59, 23);
-            this.file1PercentUpDown.TabIndex = 26;
+            this.printLangButton.Location = new System.Drawing.Point(208, 88);
+            this.printLangButton.Margin = new System.Windows.Forms.Padding(2);
+            this.printLangButton.Name = "printLangButton";
+            this.printLangButton.Size = new System.Drawing.Size(123, 20);
+            this.printLangButton.TabIndex = 6;
+            this.printLangButton.Text = "Print Language";
+            this.printLangButton.UseVisualStyleBackColor = true;
+            // 
+            // printRepsButton
+            // 
+            this.printRepsButton.Location = new System.Drawing.Point(208, 125);
+            this.printRepsButton.Margin = new System.Windows.Forms.Padding(2);
+            this.printRepsButton.Name = "printRepsButton";
+            this.printRepsButton.Size = new System.Drawing.Size(123, 20);
+            this.printRepsButton.TabIndex = 8;
+            this.printRepsButton.Text = "Print Max Reps";
+            this.printRepsButton.UseVisualStyleBackColor = true;
+            this.printRepsButton.Click += new System.EventHandler(this.printRepsButton_Click);
+            // 
+            // selectedYear
+            // 
+            this.selectedYear.Location = new System.Drawing.Point(88, 22);
+            this.selectedYear.Maximum = new decimal(new int[] {
+            3000,
+            0,
+            0,
+            0});
+            this.selectedYear.Name = "selectedYear";
+            this.selectedYear.Size = new System.Drawing.Size(120, 23);
+            this.selectedYear.TabIndex = 27;
+            this.selectedYear.Value = new decimal(new int[] {
+            2021,
+            0,
+            0,
+            0});
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(37, 24);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(35, 15);
+            this.label5.TabIndex = 31;
+            this.label5.Text = "YEAR";
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(1182, 45);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowTemplate.Height = 25;
+            this.dataGridView1.Size = new System.Drawing.Size(682, 687);
+            this.dataGridView1.TabIndex = 32;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1457, 792);
+            this.ClientSize = new System.Drawing.Size(1900, 748);
+            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.selectedYear);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.ReportBox);
             this.Controls.Add(this.SelectCourseComboBox);
             this.Controls.Add(this.panel1);
@@ -451,8 +541,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.maxMatchingFilesUpDown)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.file2PercentUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.file1PercentUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.file2PercentUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.selectedYear)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -466,9 +558,7 @@
         private System.Windows.Forms.ToolStripMenuItem file;
         private System.Windows.Forms.ToolStripMenuItem selectFolder;
         private System.Windows.Forms.ComboBox langComboBox;
-        private System.Windows.Forms.Button printLangButton;
         private System.Windows.Forms.NumericUpDown maxRepsUpDown;
-        private System.Windows.Forms.Button printRepsButton;
         private System.Windows.Forms.TextBox baseFileTextBox;
         private System.Windows.Forms.Button baseFileButton;
         private System.Windows.Forms.TextBox customTextTextBox;
@@ -486,7 +576,16 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox SelectCourseComboBox;
         private System.Windows.Forms.NumericUpDown file2PercentUpDown;
-        private System.Windows.Forms.TextBox ReportBox;
         private System.Windows.Forms.NumericUpDown file1PercentUpDown;
+        private System.Windows.Forms.TextBox ReportBox;
+        private System.Windows.Forms.Button printLangButton;
+        private System.Windows.Forms.Button printRepsButton;
+        private System.Windows.Forms.TextBox IDtextBox;
+        private System.Windows.Forms.Button SearchStudent;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button Retrieve;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.NumericUpDown selectedYear;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }
