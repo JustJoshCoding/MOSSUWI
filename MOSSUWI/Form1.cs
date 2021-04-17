@@ -889,15 +889,15 @@ namespace MOSSUWI
         }
         void PopulateDataGrid(Dictionary<string, Flag> data)
         {
-            dataGridView1.Rows.Clear();
-            dataGridView1.Columns.Clear();
-            dataGridView1.Columns.Add("Key", "Key");
-            dataGridView1.Columns.Add("ID", "ID");
-            dataGridView1.Columns.Add("Name", "Name");
-            dataGridView1.Columns.Add("Percentage_Similar", "Percentage Similar");
+            dataGridView2.Rows.Clear();
+            dataGridView2.Columns.Clear();
+            dataGridView2.Columns.Add("Key", "Key");
+            dataGridView2.Columns.Add("ID", "ID");
+            dataGridView2.Columns.Add("Name", "Name");
+            dataGridView2.Columns.Add("Percentage_Similar", "Percentage Similar");
             foreach(var item in data)
             {
-                dataGridView1.Rows.Add(item.Key, item.Value.ID, item.Value.Name, item.Value.Percentage_Coppied);
+                dataGridView2.Rows.Add(item.Key, item.Value.ID, item.Value.Name, item.Value.Percentage_Coppied);
             }
         }
         void PopulateDataGrid1(List<Result> d)

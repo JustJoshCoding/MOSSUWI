@@ -59,6 +59,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.maxRepsUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.maxMatchingFilesUpDown)).BeginInit();
             this.panel1.SuspendLayout();
@@ -66,6 +67,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.file2PercentUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.selectedYear)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
@@ -467,12 +469,22 @@
             this.label8.TabIndex = 35;
             this.label8.Text = "MOSS Results URL";
             // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(1271, 19);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.RowTemplate.Height = 25;
+            this.dataGridView2.Size = new System.Drawing.Size(439, 620);
+            this.dataGridView2.TabIndex = 36;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1279, 721);
+            this.ClientSize = new System.Drawing.Size(1745, 721);
+            this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
@@ -507,6 +519,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.file2PercentUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.selectedYear)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -545,5 +558,6 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridView2;
     }
 }
