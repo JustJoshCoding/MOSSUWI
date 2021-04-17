@@ -41,7 +41,6 @@ namespace MOSSUWI
             BasePath = "https://mossuwi-default-rtdb.firebaseio.com/"
         };
         IFirebaseClient client;
-
         public Form1()
         {
             InitializeComponent();
@@ -86,8 +85,6 @@ namespace MOSSUWI
 
         private void getFilesRecursive(string root)
         {
-            // Data structure to hold names of subfolders to be
-            // examined for files.
             Stack<string> dirs = new Stack<string>(20);
 
             if (!System.IO.Directory.Exists(root))
@@ -135,14 +132,10 @@ namespace MOSSUWI
                     Debug.WriteLine(e.Message);
                     continue;
                 }
-                // Push the subdirectories onto the stack for traversal.
-                // This could also be done before handing the files.
                 foreach (string str in subDirs)
                 {
                     dirs.Push(str);
                 }
-                // Perform the required action on each file here.
-                // Modify this block to perform your required task.
                 foreach (string file in files)
                 {
                     string studentFolder = "";
@@ -158,7 +151,6 @@ namespace MOSSUWI
                     string studentFolderAddress = Path.Combine(root, studentFolder);
                     try
                     {
-                        // Perform whatever action is required in your scenario.
                         if (file.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
                         {
                             ExtractFiles1(file, studentFolderAddress);
@@ -192,9 +184,6 @@ namespace MOSSUWI
                     }
                     catch (System.IO.FileNotFoundException e)
                     {
-                        // If file was deleted by a separate application
-                        //  or thread since the call to TraverseTree()
-                        // then just continue.
                         Debug.WriteLine(e.Message);
                         continue;
                     }
@@ -217,7 +206,6 @@ namespace MOSSUWI
             catch (System.Exception Ex)
             {
                 Debug.WriteLine(Ex);
-                //handle error
             }
         }
 
@@ -227,18 +215,12 @@ namespace MOSSUWI
             System.IO.DirectoryInfo[] subDirs = null;
             System.Collections.Specialized.StringCollection log = new System.Collections.Specialized.StringCollection();
             System.IO.DirectoryInfo root = new System.IO.DirectoryInfo(path);
-            // First, process all the files directly under this folder
             try
             {
                 files = root.GetFiles("*.*");
             }
-            // This is thrown if even one of the files requires permissions greater
-            // than the application provides.
             catch (UnauthorizedAccessException e)
             {
-                // This code just writes out the message and continues to recurse.
-                // You may decide to do something different here. For example, you
-                // can try to elevate your privileges and access the file again.
                 log.Add(e.Message);
             }
 
@@ -251,10 +233,6 @@ namespace MOSSUWI
             {
                 foreach (System.IO.FileInfo fi in files)
                 {
-                    // In this example, we only access the existing FileInfo object. If we
-                    // want to open, delete or modify the file, then
-                    // a try-catch block is required here to handle the case
-                    // where the file has been deleted since the call to TraverseTree().
                     if (fi.FullName.EndsWith(ext, StringComparison.OrdinalIgnoreCase))
                     {
                         string destinationPath = Path.GetFullPath(Path.Combine(root.ToString(), fi.FullName));
@@ -280,12 +258,10 @@ namespace MOSSUWI
                             File.Delete(fi.FullName);
                     }
                 }
-                // Now find all the subdirectories under this directory.
                 subDirs = root.GetDirectories();
 
                 foreach (System.IO.DirectoryInfo dirInfo in subDirs)
                 {
-                    // Resursive call for each subdirectory.
                     WalkDirectoryTree(dirInfo.ToString(), stfa);
                 }
             }
@@ -296,18 +272,12 @@ namespace MOSSUWI
             System.IO.DirectoryInfo[] dirs = null;
             System.Collections.Specialized.StringCollection log = new System.Collections.Specialized.StringCollection();
             System.IO.DirectoryInfo root = new System.IO.DirectoryInfo(path);
-            // First, process all the files directly under this folder
             try
             {
                 dirs = root.GetDirectories();
             }
-            // This is thrown if even one of the files requires permissions greater
-            // than the application provides.
             catch (UnauthorizedAccessException e)
             {
-                // This code just writes out the message and continues to recurse.
-                // You may decide to do something different here. For example, you
-                // can try to elevate your privileges and access the file again.
                 log.Add(e.Message);
             }
 
@@ -341,17 +311,14 @@ namespace MOSSUWI
                                 students.Add(fi.FullName);
                         }
                     }
-
                 }
-            }
-            
-            
+            } 
         }
         private async void ExtractButton_Click(object sender, EventArgs e)
         {
             if (SelectCourseComboBox.Text != "Select Course")
             {
-                MessageBox.Show("Please select an empty folder.");
+                MessageBox.Show("Please select an Empty folder.");
                 using (FolderBrowserDialog dialog = new FolderBrowserDialog())
                 {
                     DialogResult result = dialog.ShowDialog();
@@ -379,7 +346,7 @@ namespace MOSSUWI
                                 {
                                     Students = str
                                 };
-                                PushResponse response = await client.PushTaskAsync("Submission Flags" + GetCourseSelected() + "/" + selectedYear.Text + "/", data);
+                                PushResponse response = await client.PushTaskAsync("Submission Flags/" + GetCourseSelected() + "/" + selectedYear.Text + "/", data);
                             }
                             else MessageBox.Show("Please select an Archive.");
                         }
@@ -391,9 +358,7 @@ namespace MOSSUWI
             }
             else MessageBox.Show("Please Select a Course");
         }
-
         private static readonly IntPtr INVALID_HANDLE_VALUE = new IntPtr(-1);
-
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         private struct WIN32_FIND_DATA
         {
@@ -410,16 +375,12 @@ namespace MOSSUWI
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 14)]
             public string cAlternateFileName;
         }
-
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr FindFirstFile(string lpFileName, out WIN32_FIND_DATA lpFindFileData);
-
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         private static extern bool FindNextFile(IntPtr hFindFile, out WIN32_FIND_DATA lpFindFileData);
-
         [DllImport("kernel32.dll")]
         private static extern bool FindClose(IntPtr hFindFile);
-
         public static bool CheckDirectoryEmpty_Fast(string path)
         {
             if (string.IsNullOrEmpty(path))
@@ -461,7 +422,6 @@ namespace MOSSUWI
             }
             throw new DirectoryNotFoundException();
         }
-        //
         private (string,string) GetLanguage()
         {
             string selectedLang = "";
@@ -727,21 +687,6 @@ namespace MOSSUWI
                 else MessageBox.Show("Please select Language.");
             }
         }
-
-        private void selectFolder_ItemClicked(object sender, EventArgs e)
-        {
-            using (OpenFileDialog dialog = new OpenFileDialog())
-            {
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                {
-                    textBox1.Text = dialog.FileName;
-                }
-            }
-        }
-        private void printRepsButton_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(maxRepsUpDown.Text);
-        }
         private void baseFileButton_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog dialog = new OpenFileDialog())
@@ -752,14 +697,12 @@ namespace MOSSUWI
                 }
             }
         }
-
         private void baseFileTextBox_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = e.Data.GetData(DataFormats.FileDrop) as string[]; // get all files droppeds  
             if (files != null && files.Any())
                 baseFileTextBox.Text = files.First(); //select the first one
         }
-
         private void baseFileTextBox_DragOver(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -767,17 +710,12 @@ namespace MOSSUWI
             else
                 e.Effect = DragDropEffects.None;
         }
-
-        private void customTextButton_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(customTextTextBox.Text);
-        }
         private void mossDownloadButton_Click(object sender, EventArgs e)
         {
+            linkToResults = @"http://moss.stanford.edu/results/7/6394060099005";
             if (linkToResults != "")
             {
                 int Count = 0;
-                
                 var html = linkToResults;
                 HtmlWeb web = new HtmlWeb();
                 var htmlDoc = web.Load(html);
@@ -826,15 +764,11 @@ namespace MOSSUWI
                     results.Add(result);
                     Count++;
                 }
-                for(int i = 0; i<Count; i++)
-                {
-                    completeReselts += results[i].ID1 + "   " + results[i].Name1 + "    " + results[i].File1 + "    " + results[i].ID2 + "  " + results[i].Name2 + "    " + results[i].File2 + "    " + results[i].LinesMatched + "\r\n";
-                }
-                ReportBox.Text = completeReselts;
+                PopulateDataGrid1(results);
+                
                 numRows = Count;
             }
             else MessageBox.Show("Please Upload First.");
-
         }
         public string getBetween(string strSource, string strStart, string strEnd)
         {
@@ -863,14 +797,26 @@ namespace MOSSUWI
             (string f1p, string f2p) = GetPercentagesSelected();
             int file1 = Int16.Parse(f1p);
             int file2 = Int16.Parse(f2p);
-            if (file1 > -1 || file2 > -1)
+            if (file1 > 0 || file2 > 0 )//if true
             {
-                string customResults = "ID     Student Name       File 1    Percentage   ID      Student Name     File 2     Percentage      Matched Lines\r\n";
-                for (int i = 0; i < numRows; i++)
-                {
+                List<Result> customResults = new List<Result>();
+                for (int i = 0; i < numRows-1; i++)
+                {  
                     if (Int16.Parse(results[i].P1) > file1 || Int16.Parse(results[i].P2) > file2)
                     {
-                        customResults += results[i].ID1 + "   " + results[i].Name1 + "    " + results[i].File1 + "    " + results[i].ID2 + "  " + results[i].Name2 + "    " + results[i].File2 + "    " + results[i].LinesMatched + "\r\n";
+                        Result data = new Result
+                        {
+                            ID1 = results[i].ID1,
+                            Name1 = results[i].Name1,
+                            File1 = results[i].File1,
+                            P1 = results[i].P1,
+                            ID2 = results[i].ID2,
+                            Name2 = results[i].Name2,
+                            File2 = results[i].File2,
+                            P2 = results[i].P2,
+                            LinesMatched = results[i].LinesMatched
+                        };
+                        customResults.Add(data);
                         var flag1 = new Flag
                         {
                             ID = results[i].ID1,
@@ -887,44 +833,64 @@ namespace MOSSUWI
                         PushResponse response2 = await client.PushTaskAsync("Submission Similarity Reports/" + GetCourseSelected() + "/" + selectedYear.Text + "/", flag2);
                     }
                 }
-                this.ReportBox.Text = customResults;
+                DataTable dt = new DataTable();
+                this.dataGridView1.DataSource = dt;
+                this.dataGridView1.DataSource = customResults;
             }
-            else this.ReportBox.Text = completeReselts;
+            else
+            {
+                DataTable dt = new DataTable();
+                this.dataGridView1.DataSource = dt;
+                this.dataGridView1.DataSource = results;
+            }
         }
         private void SearchStudent_Click(object sender, EventArgs e)
         {
+            List<Result> customResults = new List<Result>();
             string studentID = IDtextBox.Text;
             if (studentID != "" && studentID != "ID")
             {
-                
-                string customResults = "ID      Student Name        File 1      Percentage      ID      Student Name        File 2      Percentage      Matched Lines\r\n";
-
-                for (int i = 0; i<numRows;i++)
+                for (int i = 0; i<numRows-1;i++)
                 {
-                    
                     if (String.Equals(results[i].ID1, studentID) || String.Equals(results[i].ID2, studentID))
                     {
-                        customResults += results[i].ID1 + "   " + results[i].Name1 + "    " + results[i].File1 + "    " + results[i].ID2 + "  " + results[i].Name2 + "    " + results[i].File2 + "    " + results[i].LinesMatched + "\r\n";
+                        Result data = new Result
+                        {
+                            ID1 = results[i].ID1,
+                            Name1 = results[i].Name1,
+                            File1 = results[i].File1,
+                            P1 = results[i].P1,
+                            ID2 = results[i].ID2,
+                            Name2 = results[i].Name2,
+                            File2 = results[i].File2,
+                            P2 = results[i].P2,
+                            LinesMatched = results[i].LinesMatched
+                        };
+                        customResults.Add(data);
                     }
-                    
                 }
-                this.ReportBox.Text = customResults;
+                DataTable dt = new DataTable();
+                this.dataGridView1.DataSource = dt;
+                this.dataGridView1.DataSource = customResults;
             }
-            else this.ReportBox.Text = completeReselts;
+            else
+            {
+                DataTable dt = new DataTable();
+                this.dataGridView1.DataSource = dt;
+                this.dataGridView1.DataSource = results;
+            }  
         }
 
         private void Retrieve_Click(object sender, EventArgs e)
         {
             FirebaseResponse response =  client.Get("Submission Similarity Reports/" + GetCourseSelected() + "/" + selectedYear.Text + "/");
             Dictionary<string, Flag> data = JsonConvert.DeserializeObject<Dictionary<string, Flag>>(response.Body.ToString());
-            //string ret = "ID    Student Name    Percentage Coppied\r\n";
             PopulateDataGrid(data);
         }
         void PopulateDataGrid(Dictionary<string, Flag> data)
         {
             dataGridView1.Rows.Clear();
             dataGridView1.Columns.Clear();
-
             dataGridView1.Columns.Add("Key", "Key");
             dataGridView1.Columns.Add("ID", "ID");
             dataGridView1.Columns.Add("Name", "Name");
@@ -933,6 +899,13 @@ namespace MOSSUWI
             {
                 dataGridView1.Rows.Add(item.Key, item.Value.ID, item.Value.Name, item.Value.Percentage_Coppied);
             }
+        }
+        void PopulateDataGrid1(List<Result> d)
+        {
+            dataGridView1.Rows.Clear();
+            dataGridView1.Columns.Clear();
+            dataGridView1.DataSource = d;
+            dataGridView1.Refresh();
         }
 
     }

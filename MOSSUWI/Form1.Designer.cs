@@ -53,7 +53,6 @@
             this.GenerateReportButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.SelectCourseComboBox = new System.Windows.Forms.ComboBox();
-            this.ReportBox = new System.Windows.Forms.TextBox();
             this.selectedYear = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -72,21 +71,20 @@
             // textBox1
             // 
             this.textBox1.AllowDrop = true;
-            this.textBox1.Location = new System.Drawing.Point(59, 96);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.textBox1.Location = new System.Drawing.Point(39, 64);
             this.textBox1.Name = "textBox1";
             this.textBox1.PlaceholderText = "Archived Folder";
-            this.textBox1.Size = new System.Drawing.Size(385, 25);
+            this.textBox1.Size = new System.Drawing.Size(258, 19);
             this.textBox1.TabIndex = 0;
             this.textBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.textBox1_DragDrop);
             this.textBox1.DragOver += new System.Windows.Forms.DragEventHandler(this.textBox1_DragOver);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(178, 520);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.button2.Location = new System.Drawing.Point(119, 347);
+            this.button2.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(227, 57);
+            this.button2.Size = new System.Drawing.Size(151, 38);
             this.button2.TabIndex = 2;
             this.button2.Text = "MOSS Upload";
             this.button2.UseVisualStyleBackColor = true;
@@ -137,17 +135,17 @@
             "VHDL",
             "Verilog",
             "Visual Basic"});
-            this.langComboBox.Location = new System.Drawing.Point(515, 28);
-            this.langComboBox.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.langComboBox.Location = new System.Drawing.Point(343, 19);
+            this.langComboBox.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.langComboBox.Name = "langComboBox";
-            this.langComboBox.Size = new System.Drawing.Size(278, 26);
+            this.langComboBox.Size = new System.Drawing.Size(187, 20);
             this.langComboBox.TabIndex = 5;
             this.langComboBox.Text = "Select Language";
             // 
             // maxRepsUpDown
             // 
-            this.maxRepsUpDown.Location = new System.Drawing.Point(363, 153);
-            this.maxRepsUpDown.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.maxRepsUpDown.Location = new System.Drawing.Point(242, 102);
+            this.maxRepsUpDown.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.maxRepsUpDown.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -159,7 +157,7 @@
             0,
             0});
             this.maxRepsUpDown.Name = "maxRepsUpDown";
-            this.maxRepsUpDown.Size = new System.Drawing.Size(80, 25);
+            this.maxRepsUpDown.Size = new System.Drawing.Size(53, 19);
             this.maxRepsUpDown.TabIndex = 7;
             this.maxRepsUpDown.Value = new decimal(new int[] {
             10,
@@ -170,21 +168,21 @@
             // baseFileTextBox
             // 
             this.baseFileTextBox.AllowDrop = true;
-            this.baseFileTextBox.Location = new System.Drawing.Point(59, 210);
-            this.baseFileTextBox.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.baseFileTextBox.Location = new System.Drawing.Point(39, 140);
+            this.baseFileTextBox.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.baseFileTextBox.Name = "baseFileTextBox";
             this.baseFileTextBox.PlaceholderText = "Base File";
-            this.baseFileTextBox.Size = new System.Drawing.Size(385, 25);
+            this.baseFileTextBox.Size = new System.Drawing.Size(258, 19);
             this.baseFileTextBox.TabIndex = 9;
             this.baseFileTextBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.baseFileTextBox_DragDrop);
             this.baseFileTextBox.DragOver += new System.Windows.Forms.DragEventHandler(this.baseFileTextBox_DragOver);
             // 
             // baseFileButton
             // 
-            this.baseFileButton.Location = new System.Drawing.Point(475, 210);
-            this.baseFileButton.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.baseFileButton.Location = new System.Drawing.Point(317, 140);
+            this.baseFileButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.baseFileButton.Name = "baseFileButton";
-            this.baseFileButton.Size = new System.Drawing.Size(228, 24);
+            this.baseFileButton.Size = new System.Drawing.Size(152, 19);
             this.baseFileButton.TabIndex = 10;
             this.baseFileButton.Text = "Select Base File";
             this.baseFileButton.UseVisualStyleBackColor = true;
@@ -192,28 +190,29 @@
             // 
             // customTextTextBox
             // 
-            this.customTextTextBox.Location = new System.Drawing.Point(196, 273);
-            this.customTextTextBox.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.customTextTextBox.Location = new System.Drawing.Point(131, 182);
+            this.customTextTextBox.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.customTextTextBox.Name = "customTextTextBox";
             this.customTextTextBox.PlaceholderText = "Custom Text To Appear In All Submission Files";
-            this.customTextTextBox.Size = new System.Drawing.Size(597, 25);
+            this.customTextTextBox.Size = new System.Drawing.Size(399, 19);
             this.customTextTextBox.TabIndex = 11;
+            this.customTextTextBox.Visible = false;
             // 
             // groupFilesCheckBox
             // 
             this.groupFilesCheckBox.AutoSize = true;
-            this.groupFilesCheckBox.Location = new System.Drawing.Point(59, 340);
-            this.groupFilesCheckBox.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.groupFilesCheckBox.Location = new System.Drawing.Point(39, 227);
+            this.groupFilesCheckBox.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.groupFilesCheckBox.Name = "groupFilesCheckBox";
-            this.groupFilesCheckBox.Size = new System.Drawing.Size(298, 22);
+            this.groupFilesCheckBox.Size = new System.Drawing.Size(192, 16);
             this.groupFilesCheckBox.TabIndex = 13;
             this.groupFilesCheckBox.Text = "Group Files by Directory";
             this.groupFilesCheckBox.UseVisualStyleBackColor = true;
             // 
             // maxMatchingFilesUpDown
             // 
-            this.maxMatchingFilesUpDown.Location = new System.Drawing.Point(383, 390);
-            this.maxMatchingFilesUpDown.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.maxMatchingFilesUpDown.Location = new System.Drawing.Point(255, 260);
+            this.maxMatchingFilesUpDown.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.maxMatchingFilesUpDown.Maximum = new decimal(new int[] {
             1000000,
             0,
@@ -225,7 +224,7 @@
             0,
             0});
             this.maxMatchingFilesUpDown.Name = "maxMatchingFilesUpDown";
-            this.maxMatchingFilesUpDown.Size = new System.Drawing.Size(80, 25);
+            this.maxMatchingFilesUpDown.Size = new System.Drawing.Size(53, 19);
             this.maxMatchingFilesUpDown.TabIndex = 14;
             this.maxMatchingFilesUpDown.Value = new decimal(new int[] {
             250,
@@ -236,28 +235,27 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(59, 397);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(39, 265);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(316, 18);
+            this.label1.Size = new System.Drawing.Size(201, 12);
             this.label1.TabIndex = 15;
             this.label1.Text = "Max Number of Matching Files";
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(250, 457);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.textBox2.Location = new System.Drawing.Point(167, 305);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.textBox2.Name = "textBox2";
             this.textBox2.PlaceholderText = "Copy This URL And Paste Into Browser For Results";
-            this.textBox2.Size = new System.Drawing.Size(543, 25);
+            this.textBox2.Size = new System.Drawing.Size(363, 19);
             this.textBox2.TabIndex = 16;
             // 
             // mossDownloadButton
             // 
-            this.mossDownloadButton.Location = new System.Drawing.Point(476, 520);
-            this.mossDownloadButton.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.mossDownloadButton.Location = new System.Drawing.Point(317, 347);
+            this.mossDownloadButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.mossDownloadButton.Name = "mossDownloadButton";
-            this.mossDownloadButton.Size = new System.Drawing.Size(227, 60);
+            this.mossDownloadButton.Size = new System.Drawing.Size(151, 40);
             this.mossDownloadButton.TabIndex = 17;
             this.mossDownloadButton.Text = "MOSS Download";
             this.mossDownloadButton.UseVisualStyleBackColor = true;
@@ -265,10 +263,9 @@
             // 
             // selectArchive
             // 
-            this.selectArchive.Location = new System.Drawing.Point(475, 96);
-            this.selectArchive.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.selectArchive.Location = new System.Drawing.Point(317, 64);
             this.selectArchive.Name = "selectArchive";
-            this.selectArchive.Size = new System.Drawing.Size(175, 27);
+            this.selectArchive.Size = new System.Drawing.Size(117, 19);
             this.selectArchive.TabIndex = 19;
             this.selectArchive.Text = "Select Archive";
             this.selectArchive.UseVisualStyleBackColor = true;
@@ -276,10 +273,9 @@
             // 
             // ExtractButton
             // 
-            this.ExtractButton.Location = new System.Drawing.Point(676, 94);
-            this.ExtractButton.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.ExtractButton.Location = new System.Drawing.Point(451, 63);
             this.ExtractButton.Name = "ExtractButton";
-            this.ExtractButton.Size = new System.Drawing.Size(117, 27);
+            this.ExtractButton.Size = new System.Drawing.Size(78, 18);
             this.ExtractButton.TabIndex = 20;
             this.ExtractButton.Text = "Extract";
             this.ExtractButton.UseVisualStyleBackColor = true;
@@ -296,26 +292,25 @@
             this.panel1.Controls.Add(this.file2PercentUpDown);
             this.panel1.Controls.Add(this.GenerateReportButton);
             this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(24, 603);
-            this.panel1.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.panel1.Location = new System.Drawing.Point(16, 402);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(787, 355);
+            this.panel1.Size = new System.Drawing.Size(525, 237);
             this.panel1.TabIndex = 22;
             // 
             // label3
             // 
             this.label3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label3.Location = new System.Drawing.Point(0, 0);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(787, 2);
+            this.label3.Size = new System.Drawing.Size(525, 1);
             this.label3.TabIndex = 31;
             // 
             // Retrieve
             // 
-            this.Retrieve.Location = new System.Drawing.Point(22, 197);
-            this.Retrieve.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.Retrieve.Location = new System.Drawing.Point(15, 131);
             this.Retrieve.Name = "Retrieve";
-            this.Retrieve.Size = new System.Drawing.Size(378, 27);
+            this.Retrieve.Size = new System.Drawing.Size(252, 25);
             this.Retrieve.TabIndex = 30;
             this.Retrieve.Text = "Retrieve Flagged Students";
             this.Retrieve.UseVisualStyleBackColor = true;
@@ -323,19 +318,17 @@
             // 
             // IDtextBox
             // 
-            this.IDtextBox.Location = new System.Drawing.Point(194, 128);
-            this.IDtextBox.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.IDtextBox.Location = new System.Drawing.Point(129, 85);
             this.IDtextBox.Name = "IDtextBox";
             this.IDtextBox.PlaceholderText = "ID";
-            this.IDtextBox.Size = new System.Drawing.Size(198, 25);
+            this.IDtextBox.Size = new System.Drawing.Size(133, 19);
             this.IDtextBox.TabIndex = 29;
             // 
             // SearchStudent
             // 
-            this.SearchStudent.Location = new System.Drawing.Point(402, 126);
-            this.SearchStudent.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.SearchStudent.Location = new System.Drawing.Point(268, 84);
             this.SearchStudent.Name = "SearchStudent";
-            this.SearchStudent.Size = new System.Drawing.Size(117, 27);
+            this.SearchStudent.Size = new System.Drawing.Size(78, 18);
             this.SearchStudent.TabIndex = 28;
             this.SearchStudent.Text = "Search";
             this.SearchStudent.UseVisualStyleBackColor = true;
@@ -344,35 +337,31 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(22, 131);
-            this.label4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label4.Location = new System.Drawing.Point(15, 87);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(162, 18);
+            this.label4.Size = new System.Drawing.Size(103, 12);
             this.label4.TabIndex = 27;
             this.label4.Text = "Student Search";
             // 
             // file1PercentUpDown
             // 
-            this.file1PercentUpDown.Location = new System.Drawing.Point(445, 56);
-            this.file1PercentUpDown.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.file1PercentUpDown.Location = new System.Drawing.Point(297, 37);
             this.file1PercentUpDown.Name = "file1PercentUpDown";
-            this.file1PercentUpDown.Size = new System.Drawing.Size(80, 25);
+            this.file1PercentUpDown.Size = new System.Drawing.Size(53, 19);
             this.file1PercentUpDown.TabIndex = 26;
             // 
             // file2PercentUpDown
             // 
-            this.file2PercentUpDown.Location = new System.Drawing.Point(535, 56);
-            this.file2PercentUpDown.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.file2PercentUpDown.Location = new System.Drawing.Point(357, 37);
             this.file2PercentUpDown.Name = "file2PercentUpDown";
-            this.file2PercentUpDown.Size = new System.Drawing.Size(80, 25);
+            this.file2PercentUpDown.Size = new System.Drawing.Size(53, 19);
             this.file2PercentUpDown.TabIndex = 25;
             // 
             // GenerateReportButton
             // 
-            this.GenerateReportButton.Location = new System.Drawing.Point(625, 54);
-            this.GenerateReportButton.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.GenerateReportButton.Location = new System.Drawing.Point(417, 36);
             this.GenerateReportButton.Name = "GenerateReportButton";
-            this.GenerateReportButton.Size = new System.Drawing.Size(117, 27);
+            this.GenerateReportButton.Size = new System.Drawing.Size(78, 18);
             this.GenerateReportButton.TabIndex = 24;
             this.GenerateReportButton.Text = "Sort";
             this.GenerateReportButton.UseVisualStyleBackColor = true;
@@ -381,10 +370,9 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(22, 58);
-            this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label2.Location = new System.Drawing.Point(15, 39);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(404, 18);
+            this.label2.Size = new System.Drawing.Size(257, 12);
             this.label2.TabIndex = 22;
             this.label2.Text = "Select Maximum Similarity Percentage";
             // 
@@ -401,38 +389,22 @@
             "INFO 2604",
             "COMP 3606",
             "COMP 3607"});
-            this.SelectCourseComboBox.Location = new System.Drawing.Point(276, 28);
-            this.SelectCourseComboBox.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.SelectCourseComboBox.Location = new System.Drawing.Point(184, 19);
             this.SelectCourseComboBox.Name = "SelectCourseComboBox";
-            this.SelectCourseComboBox.Size = new System.Drawing.Size(187, 26);
+            this.SelectCourseComboBox.Size = new System.Drawing.Size(126, 20);
             this.SelectCourseComboBox.TabIndex = 25;
             this.SelectCourseComboBox.Text = "Select Course";
             // 
-            // ReportBox
-            // 
-            this.ReportBox.BackColor = System.Drawing.SystemColors.Control;
-            this.ReportBox.Font = new System.Drawing.Font("Lucida Fax", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ReportBox.ForeColor = System.Drawing.SystemColors.InfoText;
-            this.ReportBox.Location = new System.Drawing.Point(832, 54);
-            this.ReportBox.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
-            this.ReportBox.Multiline = true;
-            this.ReportBox.Name = "ReportBox";
-            this.ReportBox.ReadOnly = true;
-            this.ReportBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.ReportBox.Size = new System.Drawing.Size(1012, 904);
-            this.ReportBox.TabIndex = 26;
-            // 
             // selectedYear
             // 
-            this.selectedYear.Location = new System.Drawing.Point(122, 29);
-            this.selectedYear.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.selectedYear.Location = new System.Drawing.Point(81, 19);
             this.selectedYear.Maximum = new decimal(new int[] {
             3000,
             0,
             0,
             0});
             this.selectedYear.Name = "selectedYear";
-            this.selectedYear.Size = new System.Drawing.Size(90, 25);
+            this.selectedYear.Size = new System.Drawing.Size(60, 19);
             this.selectedYear.TabIndex = 27;
             this.selectedYear.Value = new decimal(new int[] {
             2021,
@@ -443,64 +415,70 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(60, 31);
-            this.label5.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label5.Location = new System.Drawing.Point(40, 21);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(52, 18);
+            this.label5.Size = new System.Drawing.Size(33, 12);
             this.label5.TabIndex = 31;
             this.label5.Text = "YEAR";
             // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(1858, 54);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
+            this.dataGridView1.Location = new System.Drawing.Point(579, 19);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 62;
             this.dataGridView1.RowTemplate.Height = 25;
-            this.dataGridView1.Size = new System.Drawing.Size(1072, 824);
+            this.dataGridView1.Size = new System.Drawing.Size(686, 620);
             this.dataGridView1.TabIndex = 32;
+            this.dataGridView1.AllowUserToAddRowsChanged += new System.EventHandler(this.SearchStudent_Click);
+            this.dataGridView1.AllowUserToDeleteRowsChanged += new System.EventHandler(this.SearchStudent_Click);
+            this.dataGridView1.AllowUserToOrderColumnsChanged += new System.EventHandler(this.SearchStudent_Click);
+            this.dataGridView1.AllowUserToResizeColumnsChanged += new System.EventHandler(this.SearchStudent_Click);
+            this.dataGridView1.AllowUserToResizeRowsChanged += new System.EventHandler(this.SearchStudent_Click);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(60, 280);
+            this.label6.Location = new System.Drawing.Point(40, 187);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(129, 18);
+            this.label6.Size = new System.Drawing.Size(82, 12);
             this.label6.TabIndex = 33;
             this.label6.Text = "Custom Text";
+            this.label6.Visible = false;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(59, 160);
+            this.label7.Location = new System.Drawing.Point(39, 107);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(283, 18);
+            this.label7.Size = new System.Drawing.Size(180, 12);
             this.label7.TabIndex = 34;
             this.label7.Text = "Max Number of Repetitions";
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(59, 464);
+            this.label8.Location = new System.Drawing.Point(39, 309);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(184, 18);
+            this.label8.Size = new System.Drawing.Size(117, 12);
             this.label8.TabIndex = 35;
             this.label8.Text = "MOSS Results URL";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1807, 1076);
+            this.ClientSize = new System.Drawing.Size(1279, 721);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.selectedYear);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.ReportBox);
             this.Controls.Add(this.SelectCourseComboBox);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.ExtractButton);
@@ -518,7 +496,6 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox1);
             this.Font = new System.Drawing.Font("Lucida Console", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -557,17 +534,16 @@
         private System.Windows.Forms.ComboBox SelectCourseComboBox;
         private System.Windows.Forms.NumericUpDown file2PercentUpDown;
         private System.Windows.Forms.NumericUpDown file1PercentUpDown;
-        private System.Windows.Forms.TextBox ReportBox;
         private System.Windows.Forms.TextBox IDtextBox;
         private System.Windows.Forms.Button SearchStudent;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button Retrieve;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.NumericUpDown selectedYear;
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label3;
+        public System.Windows.Forms.DataGridView dataGridView1;
     }
 }
